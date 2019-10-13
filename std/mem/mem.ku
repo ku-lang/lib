@@ -1,0 +1,35 @@
+// TODO: check for overflow when doing `num * sizeof(T)``
+
+pub fun alloc<T>()  ^var T {
+    return (^var T)(rawAlloc(sizeof(T)));
+}
+
+pub fun allocArray<T>(num: uint)  []T {
+    rawPtr := (^T)(rawAlloc(sizeof(T) * num));
+    return makeArray(rawPtr, num);
+}
+
+pub fun copyArray<T>(var dest: []T, src: []T, num: uint) {
+    var max := num;
+    if max > len(dest) {
+        max = len(dest);
+    }
+    if max > len(src) {
+        max = len(src);
+    }
+
+    var i: uint = 0;
+    for i < max {
+        dest[i] = src[i];
+        i += 1;
+    }
+}
+
+pub fun free<T>(ptr: ^T) {
+    rawFree(uintptr(ptr));
+}
+
+pub fun freeArray<T>(array: []T) {
+    (_, ptr) := breakArray<T>(array);
+    rawFree(uintptr(ptr));
+}

@@ -1,0 +1,10 @@
+#[c] fun malloc(size: uint)  ^C::void;
+#[c] fun free(ptr: ^C::void);
+
+pub fun rawAlloc(bytes: uint)  uintptr {
+    return uintptr(C::malloc(bytes));
+}
+
+pub fun rawFree(ptr: uintptr) {
+    C::free((^C::void)(ptr));
+}

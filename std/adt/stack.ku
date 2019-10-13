@@ -1,0 +1,161 @@
+#use std::mem
+
+// TODO(felix):
+// - peek(offset) 
+// - isEmpty()
+// - find(T)
+
+/// A simple LIFO (last in first out) queue/Stack.
+///
+/// ## Example
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     stack := adt::Stack::new();
+/// 	return 0;	
+/// }
+/// ```
+pub type Stack struct <T> {
+	data: ^var List<T>,
+};
+
+/// Create a new Stack
+///
+/// ## Example
+/// ```
+/// #use std::adt
+/// 
+/// type Scope struct {
+/// 	parent: ^var Scope,
+/// };
+/// 
+/// pub fun main()  int {
+/// 	scopes := adt::Stack::new<Scope>();
+/// 	defer scopes.destroy();
+/// 	return 0;	
+/// }
+/// ```
+pub fun (Stack) new<T>()  ^var Stack<T> {
+	stack := mem::alloc<Stack<T>>();
+	@stack = Stack<T> {
+		data: List::new<T>(), 
+	};
+	return stack;
+}
+
+/// Returns the length of the stack, i.e.
+/// how many items there are in the stack. This
+/// is not necessarily how much memory has been
+/// allocated for the stack.
+///
+/// ## Example
+/// ```
+/// #use std::adt
+/// 
+/// type Scope struct {
+/// 	parent: ^var Scope,
+/// };
+/// 
+/// pub fun main()  int {
+/// 	scopes := adt::Stack::new<Scope>();
+/// 	defer scopes.destroy();
+/// 	len := scopes.getLength();
+/// 	return int(len);	
+/// }
+/// ```
+pub fun (s: ^Stack<T>) getLength()  uint {
+	return s.data.getLength();
+}
+
+/// This returns how much memory has been
+/// allocated for the stack.
+///
+/// ## Example
+/// ```
+/// #use std::adt
+/// 
+/// type Scope struct {
+/// 	parent: ^var Scope,
+/// };
+/// 
+/// pub fun main()  int {
+/// 	scopes := adt::Stack::new<Scope>();
+/// 	defer scopes.destroy();
+/// 	cap := scopes.getCapacity();
+/// 	return int(cap);	
+/// }
+/// ```
+pub fun (s: ^Stack<T>) getCapacity()  uint {
+	return s.data.getCapacity();
+}
+
+/// Pushes a value of type T to the
+/// stack.
+///
+/// ## Example
+/// ```
+/// #use std::adt
+/// 
+/// type Scope struct {
+/// 	parent: ^var Scope,
+/// };
+///
+/// pub fun main()  int {
+/// 	scopes := adt::Stack::new<Scope>();
+/// 	defer scopes.destroy();
+/// 	var scope: Scope;
+/// 	scopes.push(scope);
+/// 	return 0;	
+/// }
+/// ```
+pub fun (s: ^Stack<T>) push(val: T) {
+	s.data.append(val);	
+}
+
+/// Pops the top most value off the
+/// stack as an Option type.
+///
+/// ## Example
+/// ```
+/// #use std::adt
+/// 
+/// type Scope struct {
+/// 	parent: ^var Scope,
+/// };
+///
+/// pub fun main()  int {
+/// 	scopes := adt::Stack::new<Scope>();
+/// 	defer scopes.destroy();
+/// 	var scope: Scope;
+/// 	scopes.push(scope);
+///	 	myScope := scope.pop();
+/// 	myScope.unwrap();
+/// 	return 0;	
+/// }
+/// ```
+pub fun (s: ^Stack<T>) pop()  Option<T> {
+	return s.data.pop();
+}
+
+/// Destroys the Stack, clearing
+/// the stack of its contents
+///
+/// ## Example
+/// ```
+/// #use std::adt
+/// 
+/// type Scope struct {
+/// 	parent: ^var Scope,
+/// };
+///
+/// pub fun main()  int {
+/// 	scopes := adt::Stack::new<Scope>();
+/// 	defer scopes.destroy();
+/// 	return 0;	
+/// }
+/// ```
+pub fun (s: ^Stack<T>) destroy() {
+	s.data.destroy();
+    mem::free(s);
+}

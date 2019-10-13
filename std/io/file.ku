@@ -1,0 +1,113 @@
+#use std::mem
+#use std::strings
+#use std::unicode::utf8
+
+pub type FileMode enum {
+	Read,
+	Write,
+	Append,
+};
+
+pub type File struct {
+	name: string,
+	path: ^u8,
+	handle: ^FILE,
+};
+
+SEEK_END: uint = 2;
+
+READ_FLAG: ^u8 = c"r";
+WRITE_FLAG: ^u8 = c"w";
+APPEND_FLAG: ^u8 = c"a";
+
+pub fun (File) open(path: ^u8, mode: FileMode)  Option<^var File> {
+	var f: ^var File = mem::alloc<File>();
+	f.path = path;
+	f.handle = C::fopen(path, mode.getLegacyFileMode());
+
+	if f.handle == (^FILE)(0) {
+		// failed to read
+		return Option::None;
+	}
+
+	return Option::Some(f);
+}
+
+pub fun (f: ^var File) readToString()  Option<^var strings::String> {
+	if !f.isOpen() {
+		return Option::None;
+	}
+
+	if C::fseek(f.handle, 0, SEEK_END) != 0 {
+		panic("failed to seek");
+	}
+
+	size := C::ftell(f.handle);
+	if size == -1 {
+		panic("failed to tell");
+	}
+
+	C::rewind(f.handle);
+	
+	result: ^var strings::String = strings::String::withCapacity(uint(size));
+	
+	var idx := uint(0);
+	for idx < uint(size) {
+		char := []u8{C::fgetc(f.handle)};
+		decodedChar := []rune{0};
+		utf8::decode(decodedChar, char);
+		result.append(decodedChar[0]);
+		idx += 1;
+	}
+
+	return Option::Some(result);
+}
+
+pub fun (f: ^var File) isOpen()  bool {
+	return f.handle != (^FILE)(0);
+}
+
+pub fun (f: ^var File) destroy() {
+	if f.isOpen() {
+		C::fclose(f.handle);
+	}
+	mem::free(f);
+}
+
+/*
+	Note this is just placeholder stuff...
+	none of this really means anything and
+	most of these are somewhat arbitrarily
+	chosen... lol
+*/
+pub fun (f: FileMode) getLegacyFileMode()  ^u8 {
+	match f {
+		FileMode::Read => {
+			return READ_FLAG;
+		},
+		FileMode::Write => {
+			return WRITE_FLAG;
+		},
+		FileMode::Append => {
+			return APPEND_FLAG;
+		},
+		_ => {
+			return READ_FLAG;
+		},
+	}
+	return READ_FLAG;
+}
+
+// C stuff for
+// loading files
+
+type FILE struct {};
+
+#[c] fun fopen(loc: ^u8, mode: ^u8)  ^FILE;
+#[c] fun fseek(handle: ^FILE, offset: uint, whence: uint)  int;
+#[c] fun ftell(handle: ^FILE)  int;
+#[c] fun rewind(handle: ^FILE);
+#[c] fun fread(where: ^u8, sz: uint, dunno: uint, handle: ^FILE);
+#[c] fun fclose(handle: ^FILE);
+#[c] fun getenv(what: ^u8)  ^u8;
+#[c] fun fgetc(handle: ^FILE)  u8;

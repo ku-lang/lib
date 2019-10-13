@@ -1,0 +1,27 @@
+/*
+
+    BLOCKED BY #724
+
+#use std::mem
+
+pub type Node struct <T> {
+    data: T,
+    prev: ^var Node<T>,
+    next: ^var Node<T>,
+};
+
+pub type LinkedList struct<T> {
+    head: ^var Node<T>,
+};
+
+pub fun (LinkedList) new<T>()  ^var LinkedList<T> {
+    list := mem::alloc<LinkedList<T>>();
+    @list = LinkedList<T> {
+    };
+    return list;
+}
+
+pub fun (l: ^LinkedList<T>) destroy() {
+    mem::free(l);
+}
+*/

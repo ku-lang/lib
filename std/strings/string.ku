@@ -1,0 +1,261 @@
+#use std::adt
+#use std::mem
+#use std::unicode::utf8
+
+/// A dynamic, unicode decoded string.
+pub type String struct {
+	data: ^var adt::List<rune>,	
+};
+
+/// Creates a heap-allocated, dynamic string
+/// from the given static string.
+///
+/// ## Example
+/// ```
+/// #use std::string
+///
+/// myString := strings::String::from("Hello, World!");
+/// defer myString.destroy();
+/// ```
+pub fun (String) from(source: string)  ^var String {
+	str := String::withCapacity(len(source));
+	var idx := uint(0);
+	for idx < len(source) {
+		char := []u8{source[idx]};
+		decodedChar := []rune{0};
+		utf8::decode(decodedChar, char);
+		str.append(decodedChar[0]);
+		idx += 1;
+	}
+	return str;
+}
+
+/// Creates a zeroed out string with the given
+/// capacity.
+///
+/// ## Examples
+/// ```
+/// #use std::string
+/// 
+/// pub fun main()  int {
+/// 	buffer := strings::String::withCapacity(32);
+/// 	defer buffer.destroy();
+/// 	
+/// 	var idx := 0;
+/// 	for idx < 10 {
+/// 		buffer.concat("great moves!");	
+///			idx += 1;
+/// 	}
+/// 
+/// 	return 0;
+/// }
+/// ```
+pub fun (String) withCapacity(size: uint)  ^var String {
+	str := mem::alloc<String>();
+	@str = String {
+		data: adt::List::newWithCapacity<rune>(size),
+	};
+
+	var idx := uint(0);
+	for idx < size {
+		str.append('\0');
+		idx += 1;
+	}
+
+	return str;
+}
+
+/// Creates a new, empty string
+///
+/// ## Examples
+/// ```
+/// #use std::string
+/// 
+/// pub fun main()  int {
+/// 	buffer := strings::String::new();
+/// 	defer buffer.destroy();
+/// 	return 0;
+/// }
+/// ```
+pub fun (String) new()  ^var String {
+	return String::withCapacity(0);
+}
+
+/// Clear the entire string returning it
+/// back to a length of zero
+///
+/// ## Examples
+/// ```
+/// #use std::string
+/// #use std::io
+/// 
+/// pub fun main()  int {
+/// 	johnsLeftString := strings::String::from("Hello, World!");
+/// 	defer johnsLeftString.destroy();
+///
+/// 	io::printDynamicString(johnsLeftString);
+/// 	johnsLeftString.clear();
+/// 	io::printDynamicString(johnsLeftString);
+/// 
+/// 	return 0;
+/// }
+/// ```
+pub fun (a: ^String) clear() {
+	var idx := uint(0);
+	for idx < a.length() {
+		a.pop();
+		idx += 1;
+	}
+}
+
+pub fun (a: ^String) toRawPointer()  ^rune {
+	return a.data.toRawPointer();
+}
+
+/// Pops and returns the last rune
+/// in the string wrapped in an Option type.
+/// 
+/// ## Examples
+/// 
+/// ```
+/// #use std::string
+/// #use std::io
+/// 
+/// pub fun main()  int {
+/// 	sentence := strings::String::from("hey jude, how are ya?");
+/// 	end := string.pop();
+///		io::printRune(end.unwrap());
+/// 	return 0;
+/// }
+/// ```
+pub fun (a: ^String) pop()  Option<rune> {
+	if a.length() == 0 {
+		return Option::None;
+	}
+	return a.data.pop();
+}
+
+/// Append a static, fixed length string
+/// to the end of a dynamic string
+/// 
+/// ## Examples
+/// 
+/// ```
+/// #use std::string
+/// #use std::io
+///
+/// pub fun main()  int {
+/// 	part := strings::String::from("Hello, ");
+/// 	part.concat("world!");
+/// 	io::printDynamicString(part);
+///		return 0;
+/// }
+/// ```
+pub fun (a: ^String) concat(other: string) {
+	var idx := uint(0);
+	for idx < len(other) {
+		otherRunePointer := uintptr(other[idx]);
+		a.append((rune)(otherRunePointer));
+		idx += 1;
+	}
+}
+
+/// Appends a rune to the end of 
+/// the given string
+///
+/// ## Examples
+/// 
+/// ```
+/// #use std::string
+/// #use std::io
+/// 
+/// pub fun main()  int {
+/// 	junk := []rune{'a', 'b', 'c'};
+///		foo := strings::String::from("some letters: ");
+/// 	io::printDynamicString(foo);
+///
+///		var idx := uint(0);
+///		for idx < len(junk) {
+/// 		if idx != 0 {
+/// 			foo.append(',');
+/// 		}
+/// 		foo.append(junk[idx]);
+/// 		idx += 1;
+/// 	}
+///
+/// 	io::printDynamicString(foo);
+/// 	return 0;
+/// }
+/// ```
+pub fun (a: ^String) append(char: rune) {
+	a.data.append(char);
+}
+
+/// Returns the rune at the given index
+/// wrapped in an Option type.
+///
+/// ## Examples
+/// 
+/// ```
+/// #use std::string
+/// #use std::io
+/// 
+/// pub fun main()  int {
+/// 	foo := strings::String::from("apples, tomatos, oranges");
+///		var idx := uint(0);
+///		for idx < foo.length() {
+///			char := foo.at(idx);
+///			io::printRune(char.unwrap());
+///			idx += 1;
+///		}
+///		return 0;
+/// }
+/// ```
+pub fun (a: ^String) get(index: uint)  Option<rune> {
+	if index < 0 || index > a.length() {
+		return Option::None;
+	}
+	return a.data.get(index);
+}
+
+pub fun (a: ^String) set(val: rune, where: uint) {
+	a.data.set(val, where);
+}
+
+/// Returns the length of the string
+/// note that a string is dynamic, and this
+/// is not the amount of memory the string
+/// has reversed, just how much of that memory
+/// it is taking up.
+///
+/// ## Examples
+/// 
+/// ```
+/// #use std::string
+/// 
+/// pub fun main()  int {
+/// 	foo := strings::String::from("Ku Language!");
+/// 	return foo.length();
+/// }
+/// ```
+pub fun (a: ^String) length()  uint {
+	return a.data.getLength();
+}
+
+/// Destroys the string
+///
+/// ## Examples
+/// 
+/// ```
+/// #use std::string
+///
+/// pub fun main()  int {
+/// 	name := strings::String::from("Felix");
+/// 	name.destroy();
+///		return 0;
+/// }
+/// ```
+pub fun (a: ^String) destroy() {
+	a.data.destroy();
+	mem::free(a);
+}

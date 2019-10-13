@@ -1,0 +1,293 @@
+#use std::mem
+
+/// A generic List data structure
+/// note that this structure, by default,
+/// has a growth rate of 2, meaning it
+/// will double in size. 
+pub type List struct<T> {
+    data: ^var T,
+    length: uint,
+    capacity: uint,
+    growthRate: f32,
+};
+
+BASE_CAPACITY: uint = 4;
+DEFAULT_GROWTH_RATE: f32 = 2;
+
+/// Creates a new List with a capacity
+/// of zero, i.e. no space allocated.
+///
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     something := adt::List::new<u8>();
+///     defer something.destroy();
+///     return 0;
+/// }
+/// ```
+pub fun (List) new<T>()  ^var List<T> {
+    return List::newWithCapacity<T>(0);
+}
+
+/// Creates a List, allocating memory
+/// of the given capacity
+///
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// #use std::io
+///
+/// pub fun main()  int {
+///     fupa := adt::List::newWithCapacity<int>(32);
+///     io::printUint(fupa.getCapacity());
+///     fupa.destroy();
+///     return fupa; 
+/// }
+/// ```
+pub fun (List) newWithCapacity<T>(var cap: uint)  ^var List<T> {
+    if cap <= 0 {
+        cap = BASE_CAPACITY;
+    }
+
+    size := sizeof(T) * cap;
+
+    res := mem::alloc<List<T>>();
+    @res = List<T>{
+        data: (^var T)(mem::rawAlloc(size)),
+        length: 0,
+        growthRate: DEFAULT_GROWTH_RATE,
+        capacity: cap,
+    };
+
+    return res;
+}
+
+/// Destroys the List and its data
+/// 
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     list := adt::List::new<int>(666);
+///     defer list.destroy();
+/// }
+/// ```
+pub fun (it: ^List<T>) destroy() {
+    mem::rawFree(uintptr(it.data));
+    mem::free(it);
+}
+
+/// Returns a raw pointer to the
+/// data of the list
+///
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     something := adt::List::new<int>();
+///     something.append(4);
+///     raw := something.toRawPointer();
+///     return @raw;
+/// }
+/// ```
+pub fun (it: ^List<T>) toRawPointer()  ^T {
+    return it.data;
+}
+
+/// Returns the value at the given index
+///
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     foo := adt::List::new<int>();
+///     foo.append(16);
+///     foo.append(32);
+///     foo.append(64);
+///     fooValue := foo.get(2);
+///     return fooValue.unwrap();
+/// }
+/// ```
+pub fun (it: List<T>) get(index: uint)  Option<T> {
+    if index < 0 || index >= it.length {
+        return Option::None;
+    }
+    return Option::Some(it.data[index]);
+}
+
+pub fun (it: List<T>) set(val: T, where: uint) {
+    if where < 0 || where >= it.length {
+        return;
+    }
+    it.data[where] = val;
+}
+
+/// Returns how many items are 
+/// currently in the list
+/// 
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     foo := adt::List::new<int>();
+///     return foo.getLength();
+/// }
+/// ```
+pub fun (it: List<T>) getLength()  uint {
+    return it.length;
+}
+
+/// Returns the amount of memory allocated
+/// for the list, which is  not the amount
+/// of items in the list.
+/// 
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     foo := adt::List::newWithCapacity<int>(555);
+///     return foo.getCapacity();
+/// }
+/// ```
+pub fun (it: List<T>) getCapacity()  uint {
+    return it.capacity;
+}
+
+/// This will double the size of
+/// the lists data
+/// Note that for now the memcpy seems
+/// to be having some issues, so I'm just
+/// manually swapping the data for now.
+fun (it: ^var List<T>) grow() {
+    oldData := it.data;
+    it.capacity = uint(f32(it.capacity) * it.growthRate);
+    newData := (^var T)(mem::rawAlloc(sizeof(T) * it.capacity));
+
+    var i := uint(0);
+    for i < it.length {
+        newData[i] = oldData[i];
+        i += 1;
+    }
+
+    mem::rawFree(uintptr(oldData));
+    it.data = newData;
+}
+
+/// Overrides the growth rate of the list
+/// so that rather in growing in rate of 2,
+/// it grows in a rate of N where N is the
+/// rate specified.
+///
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     foo := adt::List::new<int>();
+///     foo.setGrowthRate(1.5);
+///     foo.destroy();
+///     return 0;
+/// }
+/// ```
+pub fun (it: ^var List<T>) setGrowthRate(var rate: f32) {
+    if rate <= 0f {
+        rate = DEFAULT_GROWTH_RATE;
+    }
+    it.growthRate = rate;
+}
+
+/// This will peek at the top of the List
+/// it will _not_ pop the value off the list.
+/// Returns None if the list is empty.
+///
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     ages := adt::List::new<int>
+///     ages.append(17);
+///     ages.append(16);
+///     ages.append(32);
+///     ages.append(93);
+///     lastAgeAppended := ages.top();
+///     return lastAgeAppended.unwrap();
+/// }
+/// ```
+pub fun (it: ^var List<T>) top()  Option<T> {
+    if it.length == 0 {
+        return Option::None;
+    }
+    return it.get(it.length - 1);
+}
+
+/// Pop the last value T from the list. Note that
+/// it does not clear out the popped item.
+/// Returns None if the list is empty.
+///
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// #use std::io
+/// 
+/// pub fun main()  int {
+///     identifiers := adt::List::new<string>();
+///     identifiers.append("foo");
+///     identifiers.append("bar");
+///     someIdentifier := identifiers.pop();
+///     io::println(someIdentifier.unwrap());
+///     return 0;
+/// }
+/// ```
+pub fun (it: ^var List<T>) pop()  Option<T> {
+    if it.length == 0 {
+        return Option::None;
+    }
+    poppedValue := it.top();
+    // clear old value?
+    it.length -= 1;
+    return poppedValue;
+}
+
+/// Append a value of type T to the List. If
+/// the length is at its capacity it will double
+/// in capacity (by default, or it will grow by
+/// whatever length is set).
+///
+/// ## Examples
+///
+/// ```
+/// #use std::adt
+/// 
+/// pub fun main()  int {
+///     fupa := adt::List::new<u8>();
+///     fupa.append(23);
+///     fupa.destroy();
+///     return 0;
+/// }
+/// ```
+pub fun (it: ^var List<T>) append(value: T) {
+    if it.length == it.capacity {
+        it.grow();
+    }
+
+    it.data[it.length] = value;
+    it.length += 1;
+}

@@ -1,0 +1,143 @@
+/// A set of utility functions
+/// for static strings.
+
+/// Returns if the given string
+/// contains the given value. The
+/// haystack is the string to look
+/// inside of for the needle.
+/// 
+/// ## Example
+///
+/// ```
+/// #use std::string
+/// #use std::io
+/// 
+/// pub fun main()  int {
+/// 	a := "foobar";
+/// 	b := "bar";
+/// 	if string::contains(a, b) {
+/// 		io::println("Found it!");
+/// 	}
+///		return 0;
+/// }
+/// ```
+pub fun contains(haystack: string, needle: string)  bool {
+	if len(haystack) < len(needle) {
+		return false;
+	}
+	
+	var idx := uint(0);
+	var count := uint(0);
+	for idx < len(haystack) {
+		if haystack[idx] == needle[count] {
+			count += 1;
+		} else {
+			count = 0;
+		}
+
+		if count == len(needle) {
+			return true;
+		}
+
+		idx += 1;
+	}
+
+	return false;
+}
+
+/// Returns if the given string
+/// has the given prefix
+///
+/// ## Example
+/// ```
+/// #use std::string
+/// #use std::io
+///
+/// pub fun main()  int {
+/// 	file := "image_temp";
+/// 	prefix := "image";
+/// 	if string::hasPrefix(file, prefix) {
+/// 		io::println("Yep!");
+/// 	}
+/// 	return 0;	
+/// }
+/// ```
+pub fun hasPrefix(source: string, prefix: string)  bool {
+	if len(prefix) > len(source) {
+		return false;
+	}
+	var idx := uint(0);
+	for idx < len(prefix) {
+		if source[idx] != prefix[idx] {
+			return false;
+		}
+		idx += 1;
+	}
+	return true;
+}
+
+/// Returns if the given string
+/// ends with the given value
+///
+/// ## Example
+/// ```
+/// #use std::string
+/// #use std::io
+///
+/// pub fun main()  int {
+/// 	file := "main.ku";
+/// 	if string::hasPrefix(file, ext) {
+/// 		io::println("Yep!");
+/// 	}
+/// 	return 0;	
+/// }
+/// ```
+pub fun hasSuffix(source: string, suffix: string)  bool {
+	
+	if len(suffix) > len(source) {
+		return false;
+	}
+
+	var idx := len(source) - len(suffix);
+	// im too tired to know why this works
+	// but it works
+	for idx < len(suffix) - idx {
+		if source[idx] != suffix[idx] {
+			return false;
+		}
+		idx += 1;
+	}
+	return true;
+}
+
+/// Compares two strings character
+/// for character.
+///
+/// ## Example
+/// ```
+/// #use std::string
+/// #use std::io
+///
+/// pub fun main()  int {
+/// 	another := "hello, world";
+/// 	one := "dj khaled";
+/// 	if string::compare(another, one) {
+/// 		io::println("They are the same!");	
+/// 	}
+/// 	return 0;	
+/// }
+/// ```
+pub fun compare(a: string, b: string)  bool {
+	if len(a) != len(b) {
+		return false;
+	}
+
+	var i := uint(0);
+	for i < len(a) {
+		if a[i] != b[i] {
+			return false;
+		}
+	}
+
+	return true;
+}
