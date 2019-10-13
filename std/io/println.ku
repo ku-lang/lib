@@ -5,7 +5,7 @@
 #[c] fun printf(fmt: ^u8, ...)  int;
 
 pub fun printNullTerminatedString(str: ^u8)  int {
-	return C::printf(c"%s\n", str);
+	return C::printf(c"%s\n", str)
 }
 
 /// Prints the given static string
@@ -16,15 +16,15 @@ pub fun printNullTerminatedString(str: ^u8)  int {
 /// ```
 /// #use std::io
 /// pub fun main()  int {
-/// 	io::println("Hello, World!");
-/// 	return 0;
+/// 	io::println("Hello, World!")
+/// 	return 0
 /// }
 /// ```
 pub fun println(message: string)  int {
 	if len(message) == 0 {
-		return C::printf(c"\n");
+		return C::printf(c"\n")
 	}
-	return C::printf(c"%.*s\n", len(message), &message[0]);
+	return C::printf(c"%.*s\n", len(message), &message[0])
 }
 
 /// Prints the given static string
@@ -36,16 +36,16 @@ pub fun println(message: string)  int {
 /// ```
 /// #use std::io
 /// pub fun main()  int {
-/// 	io::print("hello ");
-/// 	io::print("world\n");
-/// 	return 0;
+/// 	io::print("hello ")
+/// 	io::print("world\n")
+/// 	return 0
 /// }
 /// ```
 pub fun print(message: string)  int {
 	if len(message) == 0 {
-		return 0;
+		return 0
 	}
-	return C::printf(c"%.*s", len(message), &message[0]);
+	return C::printf(c"%.*s", len(message), &message[0])
 }
 
 /// Prints a dynamic, heap allocated string
@@ -58,21 +58,21 @@ pub fun print(message: string)  int {
 /// #use std::string
 ///
 /// pub fun main()  int {
-/// 	name := strings::String::from("Felix");
-/// 	defer name.destroy();
-/// 	io::printDynamicString(name);
-/// 	return 0;
+/// 	name := strings::String::from("Felix")
+/// 	defer name.destroy()
+/// 	io::printDynamicString(name)
+/// 	return 0
 /// }
 /// ```
 pub fun printDynamicString(s: ^strings::String)  int {
-	var idx := uint(0);
+	var idx := uint(0)
 	for idx < s.length() {
-		valAtIdx := s.get(idx);
-		printRune(valAtIdx.unwrap());
-		idx += 1;
+		valAtIdx := s.get(idx)
+		printRune(valAtIdx.unwrap())
+		idx += 1
 	}
-	printRune('\n');
-	return int(idx);
+	printRune('\n')
+	return int(idx)
 }
 
 /// Prints a rune character to
@@ -84,17 +84,17 @@ pub fun printDynamicString(s: ^strings::String)  int {
 /// #use std::io
 ///
 /// pub fun main()  int {
-///  	io::printRune('A');
-/// 	return 0;
+///  	io::printRune('A')
+/// 	return 0
 /// }
 /// ```
 pub fun printRune(r: rune)  int {
-	rArray := []rune{r};
-	bArray := []u8{0, 0, 0, 0};
-	utf8::encode(bArray, rArray);
-	numBytes := utf8::numBytes(rArray);
-   	C::printf(c"%.*s", numBytes, &bArray[0]);
-	return 0;
+	rArray := []rune{r}
+	bArray := []u8{0, 0, 0, 0}
+	utf8::encode(bArray, rArray)
+	numBytes := utf8::numBytes(rArray)
+   	C::printf(c"%.*s", numBytes, &bArray[0])
+	return 0
 }
 
 /// Prints an unsigned 8 bit integer (byte)
@@ -105,12 +105,12 @@ pub fun printRune(r: rune)  int {
 /// ```
 /// #use std::io
 /// pub fun main()  int {
-/// 	io::printByte(u8(32));
-/// 	return 0;
+/// 	io::printByte(u8(32))
+/// 	return 0
 /// }
 /// ```
 pub fun printByte(byte: u8)  int {
-	return C::printf(c"%c", byte);
+	return C::printf(c"%c", byte)
 }
 
 /// Prints a signed register-sized integer
@@ -121,13 +121,13 @@ pub fun printByte(byte: u8)  int {
 /// ```
 /// #use std::io
 /// pub fun main()  int {
-/// 	io::printInt(32);
-/// 	return 0;
+/// 	io::printInt(32)
+/// 	return 0
 /// }
 /// ```
 pub fun printInt(num: int)  int {
 	// use z for register-sized integer
-	return C::printf(c"%zd", num);
+	return C::printf(c"%zd", num)
 }
 
 /// Prints an unsigned integer to
@@ -138,11 +138,11 @@ pub fun printInt(num: int)  int {
 /// ```
 /// #use std::io
 /// pub fun main()  int {
-/// 	io::printUint(uint(32));
-/// 	return 0;
+/// 	io::printUint(uint(32))
+/// 	return 0
 /// }
 /// ```
 pub fun printUint(num: uint)  int {
 	// use z for register-sized integer
-	return C::printf(c"%zu", num);
+	return C::printf(c"%zu", num)
 }

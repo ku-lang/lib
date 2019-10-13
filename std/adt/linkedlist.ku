@@ -8,11 +8,11 @@ pub type Node struct <T> {
     data: T,
     prev: ^var Node<T>,
     next: ^var Node<T>,
-};
+}
 
 pub type LinkedList struct<T> {
     head: ^var Node<T>,
-};
+}
 
 pub fun (LinkedList) new<T>()  ^var LinkedList<T> {
     list := mem::alloc<LinkedList<T>>();

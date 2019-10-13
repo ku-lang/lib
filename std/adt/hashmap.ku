@@ -6,27 +6,27 @@ pub type Element struct <K, V> {
 	key: K,
 	val: V,
 	busy: bool,
-};
+}
 
 pub type HashMap struct <K, V> {
 	data: []^Element<K, V>,	
 	capacity: uint,
 	size: uint,
-};
+}
 
 pub fun (HashMap) new<K, V>()  ^var HashMap<K, V> {
-	map := mem::alloc<HashMap<K, V>>();
-	cap: uint = BASE_CAPACITY;
+	map := mem::alloc<HashMap<K, V>>()
+	cap: uint = BASE_CAPACITY
 	@map = HashMap<K, V> {
 		size: 0,
 		capacity: cap,
-	};
-	return map;
+	}
+	return map
 }
 
 pub fun (h: ^HashMap<K, V>) get(key: K)  Option<V> {
 	
-	return Option::None;
+	return Option::None
 }
 
 pub fun (h: ^HashMap<K, V>) put(key: K, val: V) {

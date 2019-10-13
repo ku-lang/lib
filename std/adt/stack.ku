@@ -12,13 +12,13 @@
 /// #use std::adt
 /// 
 /// pub fun main()  int {
-///     stack := adt::Stack::new();
-/// 	return 0;	
+///     stack := adt::Stack::new()
+/// 	return 0	
 /// }
 /// ```
 pub type Stack struct <T> {
 	data: ^var List<T>,
-};
+}
 
 /// Create a new Stack
 ///
@@ -28,20 +28,20 @@ pub type Stack struct <T> {
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
-/// };
+/// }
 /// 
 /// pub fun main()  int {
-/// 	scopes := adt::Stack::new<Scope>();
-/// 	defer scopes.destroy();
-/// 	return 0;	
+/// 	scopes := adt::Stack::new<Scope>()
+/// 	defer scopes.destroy()
+/// 	return 0	
 /// }
 /// ```
 pub fun (Stack) new<T>()  ^var Stack<T> {
-	stack := mem::alloc<Stack<T>>();
+	stack := mem::alloc<Stack<T>>()
 	@stack = Stack<T> {
 		data: List::new<T>(), 
-	};
-	return stack;
+	}
+	return stack
 }
 
 /// Returns the length of the stack, i.e.
@@ -55,17 +55,17 @@ pub fun (Stack) new<T>()  ^var Stack<T> {
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
-/// };
+/// }
 /// 
 /// pub fun main()  int {
-/// 	scopes := adt::Stack::new<Scope>();
-/// 	defer scopes.destroy();
-/// 	len := scopes.getLength();
-/// 	return int(len);	
+/// 	scopes := adt::Stack::new<Scope>()
+/// 	defer scopes.destroy()
+/// 	len := scopes.getLength()
+/// 	return int(len)	
 /// }
 /// ```
 pub fun (s: ^Stack<T>) getLength()  uint {
-	return s.data.getLength();
+	return s.data.getLength()
 }
 
 /// This returns how much memory has been
@@ -77,17 +77,17 @@ pub fun (s: ^Stack<T>) getLength()  uint {
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
-/// };
+/// }
 /// 
 /// pub fun main()  int {
-/// 	scopes := adt::Stack::new<Scope>();
-/// 	defer scopes.destroy();
-/// 	cap := scopes.getCapacity();
-/// 	return int(cap);	
+/// 	scopes := adt::Stack::new<Scope>()
+/// 	defer scopes.destroy()
+/// 	cap := scopes.getCapacity()
+/// 	return int(cap)	
 /// }
 /// ```
 pub fun (s: ^Stack<T>) getCapacity()  uint {
-	return s.data.getCapacity();
+	return s.data.getCapacity()
 }
 
 /// Pushes a value of type T to the
@@ -99,18 +99,18 @@ pub fun (s: ^Stack<T>) getCapacity()  uint {
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
-/// };
+/// }
 ///
 /// pub fun main()  int {
-/// 	scopes := adt::Stack::new<Scope>();
-/// 	defer scopes.destroy();
-/// 	var scope: Scope;
-/// 	scopes.push(scope);
-/// 	return 0;	
+/// 	scopes := adt::Stack::new<Scope>()
+/// 	defer scopes.destroy()
+/// 	var scope: Scope
+/// 	scopes.push(scope)
+/// 	return 0	
 /// }
 /// ```
 pub fun (s: ^Stack<T>) push(val: T) {
-	s.data.append(val);	
+	s.data.append(val)	
 }
 
 /// Pops the top most value off the
@@ -122,20 +122,20 @@ pub fun (s: ^Stack<T>) push(val: T) {
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
-/// };
+/// }
 ///
 /// pub fun main()  int {
-/// 	scopes := adt::Stack::new<Scope>();
-/// 	defer scopes.destroy();
-/// 	var scope: Scope;
-/// 	scopes.push(scope);
-///	 	myScope := scope.pop();
-/// 	myScope.unwrap();
-/// 	return 0;	
+/// 	scopes := adt::Stack::new<Scope>()
+/// 	defer scopes.destroy()
+/// 	var scope: Scope
+/// 	scopes.push(scope)
+///	 	myScope := scope.pop()
+/// 	myScope.unwrap()
+/// 	return 0	
 /// }
 /// ```
 pub fun (s: ^Stack<T>) pop()  Option<T> {
-	return s.data.pop();
+	return s.data.pop()
 }
 
 /// Destroys the Stack, clearing
@@ -147,15 +147,15 @@ pub fun (s: ^Stack<T>) pop()  Option<T> {
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
-/// };
+/// }
 ///
 /// pub fun main()  int {
-/// 	scopes := adt::Stack::new<Scope>();
-/// 	defer scopes.destroy();
-/// 	return 0;	
+/// 	scopes := adt::Stack::new<Scope>()
+/// 	defer scopes.destroy()
+/// 	return 0	
 /// }
 /// ```
 pub fun (s: ^Stack<T>) destroy() {
-	s.data.destroy();
-    mem::free(s);
+	s.data.destroy()
+    mem::free(s)
 }

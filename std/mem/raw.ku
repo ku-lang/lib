@@ -2,9 +2,9 @@
 #[c] fun free(ptr: ^C::void);
 
 pub fun rawAlloc(bytes: uint)  uintptr {
-    return uintptr(C::malloc(bytes));
+    return uintptr(C::malloc(bytes))
 }
 
 pub fun rawFree(ptr: uintptr) {
-    C::free((^C::void)(ptr));
+    C::free((^C::void)(ptr))
 }

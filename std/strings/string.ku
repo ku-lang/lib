@@ -5,7 +5,7 @@
 /// A dynamic, unicode decoded string.
 pub type String struct {
 	data: ^var adt::List<rune>,	
-};
+}
 
 /// Creates a heap-allocated, dynamic string
 /// from the given static string.
@@ -14,20 +14,20 @@ pub type String struct {
 /// ```
 /// #use std::string
 ///
-/// myString := strings::String::from("Hello, World!");
-/// defer myString.destroy();
+/// myString := strings::String::from("Hello, World!")
+/// defer myString.destroy()
 /// ```
 pub fun (String) from(source: string)  ^var String {
-	str := String::withCapacity(len(source));
-	var idx := uint(0);
+	str := String::withCapacity(len(source))
+	var idx := uint(0)
 	for idx < len(source) {
-		char := []u8{source[idx]};
-		decodedChar := []rune{0};
-		utf8::decode(decodedChar, char);
-		str.append(decodedChar[0]);
-		idx += 1;
+		char := []u8{source[idx]}
+		decodedChar := []rune{0}
+		utf8::decode(decodedChar, char)
+		str.append(decodedChar[0])
+		idx += 1
 	}
-	return str;
+	return str
 }
 
 /// Creates a zeroed out string with the given
@@ -38,31 +38,31 @@ pub fun (String) from(source: string)  ^var String {
 /// #use std::string
 /// 
 /// pub fun main()  int {
-/// 	buffer := strings::String::withCapacity(32);
-/// 	defer buffer.destroy();
+/// 	buffer := strings::String::withCapacity(32)
+/// 	defer buffer.destroy()
 /// 	
-/// 	var idx := 0;
+/// 	var idx := 0
 /// 	for idx < 10 {
-/// 		buffer.concat("great moves!");	
-///			idx += 1;
+/// 		buffer.concat("great moves!")	
+///			idx += 1
 /// 	}
 /// 
-/// 	return 0;
+/// 	return 0
 /// }
 /// ```
 pub fun (String) withCapacity(size: uint)  ^var String {
-	str := mem::alloc<String>();
+	str := mem::alloc<String>()
 	@str = String {
 		data: adt::List::newWithCapacity<rune>(size),
-	};
-
-	var idx := uint(0);
-	for idx < size {
-		str.append('\0');
-		idx += 1;
 	}
 
-	return str;
+	var idx := uint(0)
+	for idx < size {
+		str.append('\0')
+		idx += 1
+	}
+
+	return str
 }
 
 /// Creates a new, empty string
@@ -72,13 +72,13 @@ pub fun (String) withCapacity(size: uint)  ^var String {
 /// #use std::string
 /// 
 /// pub fun main()  int {
-/// 	buffer := strings::String::new();
-/// 	defer buffer.destroy();
-/// 	return 0;
+/// 	buffer := strings::String::new()
+/// 	defer buffer.destroy()
+/// 	return 0
 /// }
 /// ```
 pub fun (String) new()  ^var String {
-	return String::withCapacity(0);
+	return String::withCapacity(0)
 }
 
 /// Clear the entire string returning it
@@ -90,26 +90,26 @@ pub fun (String) new()  ^var String {
 /// #use std::io
 /// 
 /// pub fun main()  int {
-/// 	johnsLeftString := strings::String::from("Hello, World!");
-/// 	defer johnsLeftString.destroy();
+/// 	johnsLeftString := strings::String::from("Hello, World!")
+/// 	defer johnsLeftString.destroy()
 ///
-/// 	io::printDynamicString(johnsLeftString);
-/// 	johnsLeftString.clear();
-/// 	io::printDynamicString(johnsLeftString);
+/// 	io::printDynamicString(johnsLeftString)
+/// 	johnsLeftString.clear()
+/// 	io::printDynamicString(johnsLeftString)
 /// 
-/// 	return 0;
+/// 	return 0
 /// }
 /// ```
 pub fun (a: ^String) clear() {
-	var idx := uint(0);
+	var idx := uint(0)
 	for idx < a.length() {
-		a.pop();
-		idx += 1;
+		a.pop()
+		idx += 1
 	}
 }
 
 pub fun (a: ^String) toRawPointer()  ^rune {
-	return a.data.toRawPointer();
+	return a.data.toRawPointer()
 }
 
 /// Pops and returns the last rune
@@ -122,17 +122,17 @@ pub fun (a: ^String) toRawPointer()  ^rune {
 /// #use std::io
 /// 
 /// pub fun main()  int {
-/// 	sentence := strings::String::from("hey jude, how are ya?");
-/// 	end := string.pop();
-///		io::printRune(end.unwrap());
-/// 	return 0;
+/// 	sentence := strings::String::from("hey jude, how are ya?")
+/// 	end := string.pop()
+///		io::printRune(end.unwrap())
+/// 	return 0
 /// }
 /// ```
 pub fun (a: ^String) pop()  Option<rune> {
 	if a.length() == 0 {
-		return Option::None;
+		return Option::None
 	}
-	return a.data.pop();
+	return a.data.pop()
 }
 
 /// Append a static, fixed length string
@@ -145,18 +145,18 @@ pub fun (a: ^String) pop()  Option<rune> {
 /// #use std::io
 ///
 /// pub fun main()  int {
-/// 	part := strings::String::from("Hello, ");
-/// 	part.concat("world!");
-/// 	io::printDynamicString(part);
-///		return 0;
+/// 	part := strings::String::from("Hello, ")
+/// 	part.concat("world!")
+/// 	io::printDynamicString(part)
+///		return 0
 /// }
 /// ```
 pub fun (a: ^String) concat(other: string) {
-	var idx := uint(0);
+	var idx := uint(0)
 	for idx < len(other) {
-		otherRunePointer := uintptr(other[idx]);
-		a.append((rune)(otherRunePointer));
-		idx += 1;
+		otherRunePointer := uintptr(other[idx])
+		a.append((rune)(otherRunePointer))
+		idx += 1
 	}
 }
 
@@ -170,25 +170,25 @@ pub fun (a: ^String) concat(other: string) {
 /// #use std::io
 /// 
 /// pub fun main()  int {
-/// 	junk := []rune{'a', 'b', 'c'};
-///		foo := strings::String::from("some letters: ");
-/// 	io::printDynamicString(foo);
+/// 	junk := []rune{'a', 'b', 'c'}
+///		foo := strings::String::from("some letters: ")
+/// 	io::printDynamicString(foo)
 ///
-///		var idx := uint(0);
+///		var idx := uint(0)
 ///		for idx < len(junk) {
 /// 		if idx != 0 {
-/// 			foo.append(',');
+/// 			foo.append(',')
 /// 		}
-/// 		foo.append(junk[idx]);
-/// 		idx += 1;
+/// 		foo.append(junk[idx])
+/// 		idx += 1
 /// 	}
 ///
-/// 	io::printDynamicString(foo);
-/// 	return 0;
+/// 	io::printDynamicString(foo)
+/// 	return 0
 /// }
 /// ```
 pub fun (a: ^String) append(char: rune) {
-	a.data.append(char);
+	a.data.append(char)
 }
 
 /// Returns the rune at the given index
@@ -201,25 +201,25 @@ pub fun (a: ^String) append(char: rune) {
 /// #use std::io
 /// 
 /// pub fun main()  int {
-/// 	foo := strings::String::from("apples, tomatos, oranges");
-///		var idx := uint(0);
+/// 	foo := strings::String::from("apples, tomatos, oranges")
+///		var idx := uint(0)
 ///		for idx < foo.length() {
-///			char := foo.at(idx);
-///			io::printRune(char.unwrap());
-///			idx += 1;
+///			char := foo.at(idx)
+///			io::printRune(char.unwrap())
+///			idx += 1
 ///		}
-///		return 0;
+///		return 0
 /// }
 /// ```
 pub fun (a: ^String) get(index: uint)  Option<rune> {
 	if index < 0 || index > a.length() {
-		return Option::None;
+		return Option::None
 	}
-	return a.data.get(index);
+	return a.data.get(index)
 }
 
 pub fun (a: ^String) set(val: rune, where: uint) {
-	a.data.set(val, where);
+	a.data.set(val, where)
 }
 
 /// Returns the length of the string
@@ -234,12 +234,12 @@ pub fun (a: ^String) set(val: rune, where: uint) {
 /// #use std::string
 /// 
 /// pub fun main()  int {
-/// 	foo := strings::String::from("Ku Language!");
-/// 	return foo.length();
+/// 	foo := strings::String::from("Ku Language!")
+/// 	return foo.length()
 /// }
 /// ```
 pub fun (a: ^String) length()  uint {
-	return a.data.getLength();
+	return a.data.getLength()
 }
 
 /// Destroys the string
@@ -250,12 +250,12 @@ pub fun (a: ^String) length()  uint {
 /// #use std::string
 ///
 /// pub fun main()  int {
-/// 	name := strings::String::from("Felix");
-/// 	name.destroy();
-///		return 0;
+/// 	name := strings::String::from("Felix")
+/// 	name.destroy()
+///		return 0
 /// }
 /// ```
 pub fun (a: ^String) destroy() {
-	a.data.destroy();
-	mem::free(a);
+	a.data.destroy()
+	mem::free(a)
 }
