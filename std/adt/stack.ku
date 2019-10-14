@@ -1,4 +1,4 @@
-#use std::mem
+use std::mem
 
 // TODO(felix):
 // - peek(offset) 
@@ -9,7 +9,7 @@
 ///
 /// ## Example
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     stack := adt::Stack::new()
@@ -24,7 +24,7 @@ pub type Stack struct <T> {
 ///
 /// ## Example
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
@@ -51,7 +51,7 @@ pub fun (Stack) new<T>()  ^var Stack<T> {
 ///
 /// ## Example
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
@@ -73,7 +73,7 @@ pub fun (s: ^Stack<T>) getLength()  uint {
 ///
 /// ## Example
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
@@ -95,7 +95,7 @@ pub fun (s: ^Stack<T>) getCapacity()  uint {
 ///
 /// ## Example
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
@@ -118,7 +118,7 @@ pub fun (s: ^Stack<T>) push(val: T) {
 ///
 /// ## Example
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,
@@ -143,7 +143,7 @@ pub fun (s: ^Stack<T>) pop()  Option<T> {
 ///
 /// ## Example
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// type Scope struct {
 /// 	parent: ^var Scope,

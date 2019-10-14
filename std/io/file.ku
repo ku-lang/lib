@@ -1,6 +1,6 @@
-#use std::mem
-#use std::strings
-#use std::unicode::utf8
+use std::mem
+use std::strings
+use std::unicode::utf8
 
 pub type FileMode enum {
 	Read,
@@ -103,11 +103,11 @@ pub fun (f: FileMode) getLegacyFileMode()  ^u8 {
 
 type FILE struct {}
 
-#[c] fun fopen(loc: ^u8, mode: ^u8)  ^FILE;
-#[c] fun fseek(handle: ^FILE, offset: uint, whence: uint)  int;
-#[c] fun ftell(handle: ^FILE)  int;
-#[c] fun rewind(handle: ^FILE);
-#[c] fun fread(where: ^u8, sz: uint, dunno: uint, handle: ^FILE);
-#[c] fun fclose(handle: ^FILE);
-#[c] fun getenv(what: ^u8)  ^u8;
-#[c] fun fgetc(handle: ^FILE)  u8;
+[c] fun fopen(loc: ^u8, mode: ^u8)  ^FILE;
+[c] fun fseek(handle: ^FILE, offset: uint, whence: uint)  int;
+[c] fun ftell(handle: ^FILE)  int;
+[c] fun rewind(handle: ^FILE);
+[c] fun fread(where: ^u8, sz: uint, dunno: uint, handle: ^FILE);
+[c] fun fclose(handle: ^FILE);
+[c] fun getenv(what: ^u8)  ^u8;
+[c] fun fgetc(handle: ^FILE)  u8;

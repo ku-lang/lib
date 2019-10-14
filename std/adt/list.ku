@@ -1,4 +1,4 @@
-#use std::mem
+use std::mem
 
 /// A generic List data structure
 /// note that this structure, by default,
@@ -20,7 +20,7 @@ DEFAULT_GROWTH_RATE: f32 = 2;
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     something := adt::List::new<u8>()
@@ -38,8 +38,8 @@ pub fun (List) new<T>()  ^var List<T> {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
-/// #use std::io
+/// use std::adt
+/// use std::io
 ///
 /// pub fun main()  int {
 ///     fupa := adt::List::newWithCapacity<int>(32)
@@ -71,7 +71,7 @@ pub fun (List) newWithCapacity<T>(var cap: uint)  ^var List<T> {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     list := adt::List::new<int>(666)
@@ -89,7 +89,7 @@ pub fun (it: ^List<T>) destroy() {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     something := adt::List::new<int>()
@@ -107,7 +107,7 @@ pub fun (it: ^List<T>) toRawPointer()  ^T {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     foo := adt::List::new<int>()
@@ -138,7 +138,7 @@ pub fun (it: List<T>) set(val: T, where: uint) {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     foo := adt::List::new<int>()
@@ -156,7 +156,7 @@ pub fun (it: List<T>) getLength()  uint {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     foo := adt::List::newWithCapacity<int>(555)
@@ -195,7 +195,7 @@ fun (it: ^var List<T>) grow() {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     foo := adt::List::new<int>()
@@ -218,7 +218,7 @@ pub fun (it: ^var List<T>) setGrowthRate(var rate: f32) {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     ages := adt::List::new<int>
@@ -244,8 +244,8 @@ pub fun (it: ^var List<T>) top()  Option<T> {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
-/// #use std::io
+/// use std::adt
+/// use std::io
 /// 
 /// pub fun main()  int {
 ///     identifiers := adt::List::new<string>()
@@ -274,7 +274,7 @@ pub fun (it: ^var List<T>) pop()  Option<T> {
 /// ## Examples
 ///
 /// ```
-/// #use std::adt
+/// use std::adt
 /// 
 /// pub fun main()  int {
 ///     fupa := adt::List::new<u8>()

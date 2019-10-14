@@ -1,8 +1,8 @@
-#use std::unicode::utf8
-#use std::strings
-#use std::mem
+use std::unicode::utf8
+use std::strings
+use std::mem
 
-#[c] fun printf(fmt: ^u8, ...)  int;
+[c] fun printf(fmt: ^u8, ...)  int;
 
 pub fun printNullTerminatedString(str: ^u8)  int {
 	return C::printf(c"%s\n", str)
@@ -14,7 +14,7 @@ pub fun printNullTerminatedString(str: ^u8)  int {
 /// ## Examples
 ///
 /// ```
-/// #use std::io
+/// use std::io
 /// pub fun main()  int {
 /// 	io::println("Hello, World!")
 /// 	return 0
@@ -34,7 +34,7 @@ pub fun println(message: string)  int {
 /// ## Examples
 ///
 /// ```
-/// #use std::io
+/// use std::io
 /// pub fun main()  int {
 /// 	io::print("hello ")
 /// 	io::print("world\n")
@@ -54,8 +54,8 @@ pub fun print(message: string)  int {
 /// ## Examples
 ///
 /// ```
-/// #use std::io
-/// #use std::string
+/// use std::io
+/// use std::string
 ///
 /// pub fun main()  int {
 /// 	name := strings::String::from("Felix")
@@ -81,7 +81,7 @@ pub fun printDynamicString(s: ^strings::String)  int {
 /// ## Examples
 ///
 /// ```
-/// #use std::io
+/// use std::io
 ///
 /// pub fun main()  int {
 ///  	io::printRune('A')
@@ -103,7 +103,7 @@ pub fun printRune(r: rune)  int {
 /// ## Examples
 ///
 /// ```
-/// #use std::io
+/// use std::io
 /// pub fun main()  int {
 /// 	io::printByte(u8(32))
 /// 	return 0
@@ -119,7 +119,7 @@ pub fun printByte(byte: u8)  int {
 /// ## Examples
 ///
 /// ```
-/// #use std::io
+/// use std::io
 /// pub fun main()  int {
 /// 	io::printInt(32)
 /// 	return 0
@@ -136,7 +136,7 @@ pub fun printInt(num: int)  int {
 /// ## Examples
 ///
 /// ```
-/// #use std::io
+/// use std::io
 /// pub fun main()  int {
 /// 	io::printUint(uint(32))
 /// 	return 0

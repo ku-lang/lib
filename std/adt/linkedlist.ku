@@ -2,7 +2,7 @@
 
     BLOCKED BY #724
 
-#use std::mem
+use std::mem
 
 pub type Node struct <T> {
     data: T,

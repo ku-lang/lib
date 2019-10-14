@@ -1,4 +1,4 @@
-#use std::mem
+use std::mem
 
 // BASE_CAPACITY: uint = 32;
 

@@ -1,6 +1,6 @@
-#use std::adt
-#use std::mem
-#use std::unicode::utf8
+use std::adt
+use std::mem
+use std::unicode::utf8
 
 /// A dynamic, unicode decoded string.
 pub type String struct {
@@ -12,7 +12,7 @@ pub type String struct {
 ///
 /// ## Example
 /// ```
-/// #use std::string
+/// use std::string
 ///
 /// myString := strings::String::from("Hello, World!")
 /// defer myString.destroy()
@@ -35,7 +35,7 @@ pub fun (String) from(source: string)  ^var String {
 ///
 /// ## Examples
 /// ```
-/// #use std::string
+/// use std::string
 /// 
 /// pub fun main()  int {
 /// 	buffer := strings::String::withCapacity(32)
@@ -69,7 +69,7 @@ pub fun (String) withCapacity(size: uint)  ^var String {
 ///
 /// ## Examples
 /// ```
-/// #use std::string
+/// use std::string
 /// 
 /// pub fun main()  int {
 /// 	buffer := strings::String::new()
@@ -86,8 +86,8 @@ pub fun (String) new()  ^var String {
 ///
 /// ## Examples
 /// ```
-/// #use std::string
-/// #use std::io
+/// use std::string
+/// use std::io
 /// 
 /// pub fun main()  int {
 /// 	johnsLeftString := strings::String::from("Hello, World!")
@@ -118,8 +118,8 @@ pub fun (a: ^String) toRawPointer()  ^rune {
 /// ## Examples
 /// 
 /// ```
-/// #use std::string
-/// #use std::io
+/// use std::string
+/// use std::io
 /// 
 /// pub fun main()  int {
 /// 	sentence := strings::String::from("hey jude, how are ya?")
@@ -141,8 +141,8 @@ pub fun (a: ^String) pop()  Option<rune> {
 /// ## Examples
 /// 
 /// ```
-/// #use std::string
-/// #use std::io
+/// use std::string
+/// use std::io
 ///
 /// pub fun main()  int {
 /// 	part := strings::String::from("Hello, ")
@@ -166,8 +166,8 @@ pub fun (a: ^String) concat(other: string) {
 /// ## Examples
 /// 
 /// ```
-/// #use std::string
-/// #use std::io
+/// use std::string
+/// use std::io
 /// 
 /// pub fun main()  int {
 /// 	junk := []rune{'a', 'b', 'c'}
@@ -197,8 +197,8 @@ pub fun (a: ^String) append(char: rune) {
 /// ## Examples
 /// 
 /// ```
-/// #use std::string
-/// #use std::io
+/// use std::string
+/// use std::io
 /// 
 /// pub fun main()  int {
 /// 	foo := strings::String::from("apples, tomatos, oranges")
@@ -231,7 +231,7 @@ pub fun (a: ^String) set(val: rune, where: uint) {
 /// ## Examples
 /// 
 /// ```
-/// #use std::string
+/// use std::string
 /// 
 /// pub fun main()  int {
 /// 	foo := strings::String::from("Ku Language!")
@@ -247,7 +247,7 @@ pub fun (a: ^String) length()  uint {
 /// ## Examples
 /// 
 /// ```
-/// #use std::string
+/// use std::string
 ///
 /// pub fun main()  int {
 /// 	name := strings::String::from("Felix")
