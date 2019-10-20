@@ -2,9 +2,9 @@ use std::unicode::utf8
 use std::strings
 use std::mem
 
-[c] fun printf(fmt: ^u8, ...)  int;
+[C] fun printf(fmt ^u8, ...) int;
 
-pub fun printNullTerminatedString(str: ^u8)  int {
+pub fun printNullTerminatedString(str ^u8) int {
 	return C::printf(c"%s\n", str)
 }
 
@@ -20,7 +20,7 @@ pub fun printNullTerminatedString(str: ^u8)  int {
 /// 	return 0
 /// }
 /// ```
-pub fun println(message: string)  int {
+pub fun println(message string) int {
 	if len(message) == 0 {
 		return C::printf(c"\n")
 	}
@@ -41,7 +41,7 @@ pub fun println(message: string)  int {
 /// 	return 0
 /// }
 /// ```
-pub fun print(message: string)  int {
+pub fun print(message string) int {
 	if len(message) == 0 {
 		return 0
 	}
@@ -64,10 +64,10 @@ pub fun print(message: string)  int {
 /// 	return 0
 /// }
 /// ```
-pub fun printDynamicString(s: ^strings::String)  int {
-	var idx := uint(0)
+pub fun printDynamicString(s ^strings::String) int {
+	var idx = uint(0)
 	for idx < s.length() {
-		valAtIdx := s.get(idx)
+		let valAtIdx = s.get(idx)
 		printRune(valAtIdx.unwrap())
 		idx += 1
 	}
@@ -88,11 +88,11 @@ pub fun printDynamicString(s: ^strings::String)  int {
 /// 	return 0
 /// }
 /// ```
-pub fun printRune(r: rune)  int {
-	rArray := []rune{r}
-	bArray := []u8{0, 0, 0, 0}
+pub fun printRune(r rune) int {
+	var rArray = []rune{r}
+	var bArray = []u8{0, 0, 0, 0}
 	utf8::encode(bArray, rArray)
-	numBytes := utf8::numBytes(rArray)
+	let numBytes = utf8::numBytes(rArray)
    	C::printf(c"%.*s", numBytes, &bArray[0])
 	return 0
 }
@@ -109,7 +109,7 @@ pub fun printRune(r: rune)  int {
 /// 	return 0
 /// }
 /// ```
-pub fun printByte(byte: u8)  int {
+pub fun printByte(byte u8) int {
 	return C::printf(c"%c", byte)
 }
 
@@ -125,7 +125,7 @@ pub fun printByte(byte: u8)  int {
 /// 	return 0
 /// }
 /// ```
-pub fun printInt(num: int)  int {
+pub fun printInt(num int) int {
 	// use z for register-sized integer
 	return C::printf(c"%zd", num)
 }
@@ -142,7 +142,7 @@ pub fun printInt(num: int)  int {
 /// 	return 0
 /// }
 /// ```
-pub fun printUint(num: uint)  int {
+pub fun printUint(num uint) int {
 	// use z for register-sized integer
 	return C::printf(c"%zu", num)
 }

@@ -9,19 +9,19 @@ pub type FileMode enum {
 }
 
 pub type File struct {
-	name: string,
-	path: ^u8,
-	handle: ^FILE,
+	name string
+	path ^u8
+	handle ^FILE
 }
 
-SEEK_END: uint = 2;
+let SEEK_END uint = 2
 
-READ_FLAG: ^u8 = c"r";
-WRITE_FLAG: ^u8 = c"w";
-APPEND_FLAG: ^u8 = c"a";
+let READ_FLAG ^u8 = c"r"
+let WRITE_FLAG ^u8 = c"w"
+let APPEND_FLAG ^u8 = c"a"
 
-pub fun (File) open(path: ^u8, mode: FileMode)  Option<^var File> {
-	var f: ^var File = mem::alloc<File>()
+pub static fun File.open(path ^u8, mode FileMode) Option<^var File> {
+	var f ^var File = mem::alloc<File>()
 	f.path = path
 	f.handle = C::fopen(path, mode.getLegacyFileMode())
 
@@ -33,28 +33,28 @@ pub fun (File) open(path: ^u8, mode: FileMode)  Option<^var File> {
 	return Option::Some(f)
 }
 
-pub fun (f: ^var File) readToString()  Option<^var strings::String> {
-	if !f.isOpen() {
+pub fun File.readToString() Option<^var strings::String> {
+	if !this.isOpen() {
 		return Option::None
 	}
 
-	if C::fseek(f.handle, 0, SEEK_END) != 0 {
+	if C::fseek(this.handle, 0, SEEK_END) != 0 {
 		panic("failed to seek")
 	}
 
-	size := C::ftell(f.handle)
+	let size = C::ftell(this.handle)
 	if size == -1 {
 		panic("failed to tell")
 	}
 
-	C::rewind(f.handle)
+	C::rewind(this.handle)
 	
-	result: ^var strings::String = strings::String::withCapacity(uint(size))
+	var result ^var strings::String = strings::String::withCapacity(uint(size))
 	
-	var idx := uint(0)
+	var idx = uint(0)
 	for idx < uint(size) {
-		char := []u8{C::fgetc(f.handle)}
-		decodedChar := []rune{0}
+		var char = []u8{C::fgetc(this.handle)}
+		var decodedChar = []rune{0}
 		utf8::decode(decodedChar, char)
 		result.append(decodedChar[0])
 		idx += 1
@@ -63,15 +63,15 @@ pub fun (f: ^var File) readToString()  Option<^var strings::String> {
 	return Option::Some(result)
 }
 
-pub fun (f: ^var File) isOpen()  bool {
-	return f.handle != (^FILE)(0)
+pub fun File.isOpen()  bool {
+	return this.handle != (^FILE)(0)
 }
 
-pub fun (f: ^var File) destroy() {
-	if f.isOpen() {
-		C::fclose(f.handle)
+pub fun File.destroy() {
+	if this.isOpen() {
+		C::fclose(this.handle)
 	}
-	mem::free(f)
+	mem::free(this)
 }
 
 /*
@@ -80,8 +80,8 @@ pub fun (f: ^var File) destroy() {
 	most of these are somewhat arbitrarily
 	chosen... lol
 */
-pub fun (f: FileMode) getLegacyFileMode()  ^u8 {
-	match f {
+pub fun FileMode.getLegacyFileMode()  ^u8 {
+	match this {
 		FileMode::Read => {
 			return READ_FLAG
 		},
@@ -101,13 +101,13 @@ pub fun (f: FileMode) getLegacyFileMode()  ^u8 {
 // C stuff for
 // loading files
 
-type FILE struct {}
+type FILE {}
 
-[c] fun fopen(loc: ^u8, mode: ^u8)  ^FILE;
-[c] fun fseek(handle: ^FILE, offset: uint, whence: uint)  int;
-[c] fun ftell(handle: ^FILE)  int;
-[c] fun rewind(handle: ^FILE);
-[c] fun fread(where: ^u8, sz: uint, dunno: uint, handle: ^FILE);
-[c] fun fclose(handle: ^FILE);
-[c] fun getenv(what: ^u8)  ^u8;
-[c] fun fgetc(handle: ^FILE)  u8;
+[C] fun fopen(loc ^u8, mode ^u8) ^FILE;
+[C] fun fseek(handle ^FILE, offset uint, whence uint) int;
+[C] fun ftell(handle ^FILE) int;
+[C] fun rewind(handle ^FILE);
+[C] fun fread(where ^u8, sz uint, dunno uint, handle ^FILE);
+[C] fun fclose(handle ^FILE);
+[C] fun getenv(what ^u8) ^u8;
+[C] fun fgetc(handle ^FILE) u8;

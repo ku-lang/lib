@@ -17,7 +17,7 @@ use std::mem
 /// }
 /// ```
 pub type Stack struct <T> {
-	data: ^var List<T>,
+	data ^var List<T>
 }
 
 /// Create a new Stack
@@ -36,8 +36,8 @@ pub type Stack struct <T> {
 /// 	return 0	
 /// }
 /// ```
-pub fun (Stack) new<T>()  ^var Stack<T> {
-	stack := mem::alloc<Stack<T>>()
+pub fun Stack.new<T>() ^var Stack<T> {
+	var stack = mem::alloc<Stack<T>>()
 	@stack = Stack<T> {
 		data: List::new<T>(), 
 	}
@@ -64,8 +64,8 @@ pub fun (Stack) new<T>()  ^var Stack<T> {
 /// 	return int(len)	
 /// }
 /// ```
-pub fun (s: ^Stack<T>) getLength()  uint {
-	return s.data.getLength()
+pub fun Stack<T>.getLength() uint {
+	return this.data.getLength()
 }
 
 /// This returns how much memory has been
@@ -86,8 +86,8 @@ pub fun (s: ^Stack<T>) getLength()  uint {
 /// 	return int(cap)	
 /// }
 /// ```
-pub fun (s: ^Stack<T>) getCapacity()  uint {
-	return s.data.getCapacity()
+pub fun Stack<T>.getCapacity()  uint {
+	return this.data.getCapacity()
 }
 
 /// Pushes a value of type T to the
@@ -109,8 +109,8 @@ pub fun (s: ^Stack<T>) getCapacity()  uint {
 /// 	return 0	
 /// }
 /// ```
-pub fun (s: ^Stack<T>) push(val: T) {
-	s.data.append(val)	
+pub fun Stack<T>.push(val T) {
+	this.data.append(val)	
 }
 
 /// Pops the top most value off the
@@ -134,8 +134,8 @@ pub fun (s: ^Stack<T>) push(val: T) {
 /// 	return 0	
 /// }
 /// ```
-pub fun (s: ^Stack<T>) pop()  Option<T> {
-	return s.data.pop()
+pub fun Stack<T>.pop() Option<T> {
+	return this.data.pop()
 }
 
 /// Destroys the Stack, clearing
@@ -155,7 +155,7 @@ pub fun (s: ^Stack<T>) pop()  Option<T> {
 /// 	return 0	
 /// }
 /// ```
-pub fun (s: ^Stack<T>) destroy() {
-	s.data.destroy()
-    mem::free(s)
+pub fun Stack<T>.destroy() {
+	this.data.destroy()
+    mem::free(this)
 }

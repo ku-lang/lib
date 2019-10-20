@@ -5,14 +5,14 @@ use std::mem
 /// has a growth rate of 2, meaning it
 /// will double in size. 
 pub type List struct<T> {
-    data: ^var T,
-    length: uint,
-    capacity: uint,
-    growthRate: f32,
+    data ^var T
+    length uint
+    capacity uint
+    growthRate f32
 }
 
-BASE_CAPACITY: uint = 4;
-DEFAULT_GROWTH_RATE: f32 = 2;
+let BASE_CAPACITY uint = 4
+let DEFAULT_GROWTH_RATE f32 = 2
 
 /// Creates a new List with a capacity
 /// of zero, i.e. no space allocated.
@@ -28,7 +28,7 @@ DEFAULT_GROWTH_RATE: f32 = 2;
 ///     return 0
 /// }
 /// ```
-pub fun (List) new<T>()  ^var List<T> {
+pub static fun List.new<T>() ^var List<T> {
     return List::newWithCapacity<T>(0)
 }
 
@@ -48,14 +48,14 @@ pub fun (List) new<T>()  ^var List<T> {
 ///     return fupa 
 /// }
 /// ```
-pub fun (List) newWithCapacity<T>(var cap: uint)  ^var List<T> {
+pub static fun List.newWithCapacity<T>(var cap uint) ^var List<T> {
     if cap <= 0 {
         cap = BASE_CAPACITY
     }
 
-    size := sizeof(T) * cap
+    let size = sizeof(T) * cap
 
-    res := mem::alloc<List<T>>()
+    var res = mem::alloc<List<T>>()
     @res = List<T>{
         data: (^var T)(mem::rawAlloc(size)),
         length: 0,
@@ -78,9 +78,9 @@ pub fun (List) newWithCapacity<T>(var cap: uint)  ^var List<T> {
 ///     defer list.destroy()
 /// }
 /// ```
-pub fun (it: ^List<T>) destroy() {
-    mem::rawFree(uintptr(it.data))
-    mem::free(it)
+pub fun List<T>.destroy() {
+    mem::rawFree(uintptr(this.data))
+    mem::free(this)
 }
 
 /// Returns a raw pointer to the
@@ -98,8 +98,8 @@ pub fun (it: ^List<T>) destroy() {
 ///     return @raw
 /// }
 /// ```
-pub fun (it: ^List<T>) toRawPointer()  ^T {
-    return it.data
+pub fun List<T>.toRawPointer() ^T {
+    return this.data
 }
 
 /// Returns the value at the given index
@@ -118,18 +118,18 @@ pub fun (it: ^List<T>) toRawPointer()  ^T {
 ///     return fooValue.unwrap()
 /// }
 /// ```
-pub fun (it: List<T>) get(index: uint)  Option<T> {
-    if index < 0 || index >= it.length {
+pub fun List<T>.get(index uint) Option<T> {
+    if index < 0 || index >= this.length {
         return Option::None
     }
-    return Option::Some(it.data[index])
+    return Option::Some(this.data[index])
 }
 
-pub fun (it: List<T>) set(val: T, where: uint) {
-    if where < 0 || where >= it.length {
+pub fun List<T>.set(val T, where uint) {
+    if where < 0 || where >= this.length {
         return
     }
-    it.data[where] = val
+    this.data[where] = val
 }
 
 /// Returns how many items are 
@@ -145,8 +145,8 @@ pub fun (it: List<T>) set(val: T, where: uint) {
 ///     return foo.getLength()
 /// }
 /// ```
-pub fun (it: List<T>) getLength()  uint {
-    return it.length
+pub fun List<T>.getLength()  uint {
+    return this.length
 }
 
 /// Returns the amount of memory allocated
@@ -163,8 +163,8 @@ pub fun (it: List<T>) getLength()  uint {
 ///     return foo.getCapacity()
 /// }
 /// ```
-pub fun (it: List<T>) getCapacity()  uint {
-    return it.capacity
+pub fun List<T>.getCapacity() uint {
+    return this.capacity
 }
 
 /// This will double the size of
@@ -172,19 +172,19 @@ pub fun (it: List<T>) getCapacity()  uint {
 /// Note that for now the memcpy seems
 /// to be having some issues, so I'm just
 /// manually swapping the data for now.
-fun (it: ^var List<T>) grow() {
-    oldData := it.data
-    it.capacity = uint(f32(it.capacity) * it.growthRate)
-    newData := (^var T)(mem::rawAlloc(sizeof(T) * it.capacity))
+fun List<T>.grow() {
+    let oldData = this.data
+    this.capacity = uint(f32(this.capacity) * this.growthRate)
+    var newData = (^var T)(mem::rawAlloc(sizeof(T) * this.capacity))
 
-    var i := uint(0)
-    for i < it.length {
+    var i = uint(0)
+    for i < this.length {
         newData[i] = oldData[i]
         i += 1
     }
 
     mem::rawFree(uintptr(oldData))
-    it.data = newData
+    this.data = newData
 }
 
 /// Overrides the growth rate of the list
@@ -204,11 +204,11 @@ fun (it: ^var List<T>) grow() {
 ///     return 0
 /// }
 /// ```
-pub fun (it: ^var List<T>) setGrowthRate(var rate: f32) {
+pub fun List<T>.setGrowthRate(var rate f32) {
     if rate <= 0f {
         rate = DEFAULT_GROWTH_RATE
     }
-    it.growthRate = rate
+    this.growthRate = rate
 }
 
 /// This will peek at the top of the List
@@ -230,11 +230,11 @@ pub fun (it: ^var List<T>) setGrowthRate(var rate: f32) {
 ///     return lastAgeAppended.unwrap()
 /// }
 /// ```
-pub fun (it: ^var List<T>) top()  Option<T> {
-    if it.length == 0 {
+pub fun List<T>.top() Option<T> {
+    if this.length == 0 {
         return Option::None
     }
-    return it.get(it.length - 1)
+    return this.get(this.length - 1)
 }
 
 /// Pop the last value T from the list. Note that
@@ -256,13 +256,13 @@ pub fun (it: ^var List<T>) top()  Option<T> {
 ///     return 0
 /// }
 /// ```
-pub fun (it: ^var List<T>) pop()  Option<T> {
-    if it.length == 0 {
+pub fun List<T>.pop() Option<T> {
+    if this.length == 0 {
         return Option::None
     }
-    poppedValue := it.top()
+    var poppedValue = this.top()
     // clear old value?
-    it.length -= 1
+    this.length -= 1
     return poppedValue
 }
 
@@ -283,11 +283,11 @@ pub fun (it: ^var List<T>) pop()  Option<T> {
 ///     return 0
 /// }
 /// ```
-pub fun (it: ^var List<T>) append(value: T) {
-    if it.length == it.capacity {
-        it.grow()
+pub fun List<T>.append(value T) {
+    if this.length == this.capacity {
+        this.grow()
     }
 
-    it.data[it.length] = value
-    it.length += 1
+    this.data[this.length] = value
+    this.length += 1
 }

@@ -3,8 +3,8 @@ use std::mem
 use std::unicode::utf8
 
 /// A dynamic, unicode decoded string.
-pub type String struct {
-	data: ^var adt::List<rune>,	
+pub type String {
+	data ^var adt::List<rune>
 }
 
 /// Creates a heap-allocated, dynamic string
@@ -17,12 +17,12 @@ pub type String struct {
 /// myString := strings::String::from("Hello, World!")
 /// defer myString.destroy()
 /// ```
-pub fun (String) from(source: string)  ^var String {
-	str := String::withCapacity(len(source))
-	var idx := uint(0)
+pub static fun String.from(source string) ^var String {
+	var str = String::withCapacity(len(source))
+	var idx = uint(0)
 	for idx < len(source) {
-		char := []u8{source[idx]}
-		decodedChar := []rune{0}
+		var char = []u8{source[idx]}
+		var decodedChar = []rune{0}
 		utf8::decode(decodedChar, char)
 		str.append(decodedChar[0])
 		idx += 1
@@ -50,13 +50,13 @@ pub fun (String) from(source: string)  ^var String {
 /// 	return 0
 /// }
 /// ```
-pub fun (String) withCapacity(size: uint)  ^var String {
-	str := mem::alloc<String>()
+pub static fun String.withCapacity(size uint) ^var String {
+	var str = mem::alloc<String>()
 	@str = String {
 		data: adt::List::newWithCapacity<rune>(size),
 	}
 
-	var idx := uint(0)
+	var idx = uint(0)
 	for idx < size {
 		str.append('\0')
 		idx += 1
@@ -77,7 +77,7 @@ pub fun (String) withCapacity(size: uint)  ^var String {
 /// 	return 0
 /// }
 /// ```
-pub fun (String) new()  ^var String {
+pub static fun String.new() ^var String {
 	return String::withCapacity(0)
 }
 
@@ -100,16 +100,16 @@ pub fun (String) new()  ^var String {
 /// 	return 0
 /// }
 /// ```
-pub fun (a: ^String) clear() {
-	var idx := uint(0)
-	for idx < a.length() {
-		a.pop()
+pub fun String.clear() {
+	var idx = uint(0)
+	for idx < this.length() {
+		this.pop()
 		idx += 1
 	}
 }
 
-pub fun (a: ^String) toRawPointer()  ^rune {
-	return a.data.toRawPointer()
+pub fun String.toRawPointer() ^rune {
+	return this.data.toRawPointer()
 }
 
 /// Pops and returns the last rune
@@ -128,11 +128,11 @@ pub fun (a: ^String) toRawPointer()  ^rune {
 /// 	return 0
 /// }
 /// ```
-pub fun (a: ^String) pop()  Option<rune> {
-	if a.length() == 0 {
+pub fun String.pop()  Option<rune> {
+	if this.length() == 0 {
 		return Option::None
 	}
-	return a.data.pop()
+	return this.data.pop()
 }
 
 /// Append a static, fixed length string
@@ -151,11 +151,11 @@ pub fun (a: ^String) pop()  Option<rune> {
 ///		return 0
 /// }
 /// ```
-pub fun (a: ^String) concat(other: string) {
-	var idx := uint(0)
+pub fun String.concat(other string) {
+	var idx = uint(0)
 	for idx < len(other) {
-		otherRunePointer := uintptr(other[idx])
-		a.append((rune)(otherRunePointer))
+		var otherRunePointer = uintptr(other[idx])
+		this.append((rune)(otherRunePointer))
 		idx += 1
 	}
 }
@@ -187,8 +187,8 @@ pub fun (a: ^String) concat(other: string) {
 /// 	return 0
 /// }
 /// ```
-pub fun (a: ^String) append(char: rune) {
-	a.data.append(char)
+pub fun String.append(char rune) {
+	this.data.append(char)
 }
 
 /// Returns the rune at the given index
@@ -211,15 +211,15 @@ pub fun (a: ^String) append(char: rune) {
 ///		return 0
 /// }
 /// ```
-pub fun (a: ^String) get(index: uint)  Option<rune> {
-	if index < 0 || index > a.length() {
+pub fun String.get(index uint) Option<rune> {
+	if index < 0 || index > this.length() {
 		return Option::None
 	}
-	return a.data.get(index)
+	return this.data.get(index)
 }
 
-pub fun (a: ^String) set(val: rune, where: uint) {
-	a.data.set(val, where)
+pub fun String.set(val rune, where uint) {
+	this.data.set(val, where)
 }
 
 /// Returns the length of the string
@@ -238,8 +238,8 @@ pub fun (a: ^String) set(val: rune, where: uint) {
 /// 	return foo.length()
 /// }
 /// ```
-pub fun (a: ^String) length()  uint {
-	return a.data.getLength()
+pub fun String.length() uint {
+	return this.data.getLength()
 }
 
 /// Destroys the string
@@ -255,7 +255,7 @@ pub fun (a: ^String) length()  uint {
 ///		return 0
 /// }
 /// ```
-pub fun (a: ^String) destroy() {
-	a.data.destroy()
-	mem::free(a)
+pub fun String.destroy() {
+	this.data.destroy()
+	mem::free(this)
 }

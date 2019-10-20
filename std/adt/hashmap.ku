@@ -3,20 +3,20 @@ use std::mem
 // BASE_CAPACITY: uint = 32;
 
 pub type Element struct <K, V> {
-	key: K,
-	val: V,
-	busy: bool,
+	key K
+	val V
+	busy bool,
 }
 
 pub type HashMap struct <K, V> {
-	data: []^Element<K, V>,	
-	capacity: uint,
-	size: uint,
+	data []^Element<K, V>
+	capacity uint
+	size uint
 }
 
-pub fun (HashMap) new<K, V>()  ^var HashMap<K, V> {
-	map := mem::alloc<HashMap<K, V>>()
-	cap: uint = BASE_CAPACITY
+pub fun HashMap.new<K, V>() ^var HashMap<K, V> {
+	var map = mem::alloc<HashMap<K, V>>()
+	let cap uint = BASE_CAPACITY
 	@map = HashMap<K, V> {
 		size: 0,
 		capacity: cap,
@@ -24,15 +24,15 @@ pub fun (HashMap) new<K, V>()  ^var HashMap<K, V> {
 	return map
 }
 
-pub fun (h: ^HashMap<K, V>) get(key: K)  Option<V> {
-	
+pub fun HashMap<K, V>.get(key K) Option<V> {
+	// TBI
 	return Option::None
 }
 
-pub fun (h: ^HashMap<K, V>) put(key: K, val: V) {
-		
+pub fun HashMap<K, V>.put(key K, val V) {
+	// TBI
 }
 
-pub fun (h: ^HashMap<K, V>) destroy() {
-	
+pub fun HashMap<K, V>.destroy() {
+	// TBI
 }
