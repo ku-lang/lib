@@ -257,5 +257,5 @@ pub fun String.length() uint {
 /// ```
 pub fun String.destroy() {
 	this.data.destroy()
-	mem::free(this)
+	mem::free(^this)
 }

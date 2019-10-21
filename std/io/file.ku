@@ -71,7 +71,7 @@ pub fun File.destroy() {
 	if this.isOpen() {
 		C::fclose(this.handle)
 	}
-	mem::free(this)
+	mem::free(^this)
 }
 
 /*

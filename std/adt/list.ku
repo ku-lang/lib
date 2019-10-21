@@ -80,7 +80,7 @@ pub static fun List.newWithCapacity<T>(var cap uint) ^var List<T> {
 /// ```
 pub fun List<T>.destroy() {
     mem::rawFree(uintptr(this.data))
-    mem::free(this)
+    mem::free(^this)
 }
 
 /// Returns a raw pointer to the
@@ -172,7 +172,7 @@ pub fun List<T>.getCapacity() uint {
 /// Note that for now the memcpy seems
 /// to be having some issues, so I'm just
 /// manually swapping the data for now.
-fun List<T>.grow() {
+fun var List<T>.grow() {
     let oldData = this.data
     this.capacity = uint(f32(this.capacity) * this.growthRate)
     var newData = (^var T)(mem::rawAlloc(sizeof(T) * this.capacity))
@@ -204,7 +204,7 @@ fun List<T>.grow() {
 ///     return 0
 /// }
 /// ```
-pub fun List<T>.setGrowthRate(var rate f32) {
+pub fun var List<T>.setGrowthRate(var rate f32) {
     if rate <= 0f {
         rate = DEFAULT_GROWTH_RATE
     }
@@ -256,7 +256,7 @@ pub fun List<T>.top() Option<T> {
 ///     return 0
 /// }
 /// ```
-pub fun List<T>.pop() Option<T> {
+pub fun var List<T>.pop() Option<T> {
     if this.length == 0 {
         return Option::None
     }
@@ -283,7 +283,7 @@ pub fun List<T>.pop() Option<T> {
 ///     return 0
 /// }
 /// ```
-pub fun List<T>.append(value T) {
+pub fun var List<T>.append(value T) {
     if this.length == this.capacity {
         this.grow()
     }

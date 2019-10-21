@@ -36,7 +36,7 @@ pub type Stack struct <T> {
 /// 	return 0	
 /// }
 /// ```
-pub fun Stack.new<T>() ^var Stack<T> {
+pub static fun Stack.new<T>() ^var Stack<T> {
 	var stack = mem::alloc<Stack<T>>()
 	@stack = Stack<T> {
 		data: List::new<T>(), 
@@ -157,5 +157,5 @@ pub fun Stack<T>.pop() Option<T> {
 /// ```
 pub fun Stack<T>.destroy() {
 	this.data.destroy()
-    mem::free(this)
+    mem::free(^this)
 }
