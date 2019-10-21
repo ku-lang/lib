@@ -20,7 +20,7 @@ let READ_FLAG ^u8 = c"r"
 let WRITE_FLAG ^u8 = c"w"
 let APPEND_FLAG ^u8 = c"a"
 
-pub static fun File.open(path ^u8, mode FileMode) Option<^var File> {
+pub fun static File.open(path ^u8, mode FileMode) Option<^var File> {
 	var f ^var File = mem::alloc<File>()
 	f.path = path
 	f.handle = C::fopen(path, mode.getLegacyFileMode())

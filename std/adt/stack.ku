@@ -36,7 +36,7 @@ pub type Stack struct <T> {
 /// 	return 0	
 /// }
 /// ```
-pub static fun Stack.new<T>() ^var Stack<T> {
+pub fun static Stack.new<T>() ^var Stack<T> {
 	var stack = mem::alloc<Stack<T>>()
 	@stack = Stack<T> {
 		data: List::new<T>(), 

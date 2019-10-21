@@ -17,7 +17,7 @@ pub type String {
 /// myString := strings::String::from("Hello, World!")
 /// defer myString.destroy()
 /// ```
-pub static fun String.from(source string) ^var String {
+pub fun static String.from(source string) ^var String {
 	var str = String::withCapacity(len(source))
 	var idx = uint(0)
 	for idx < len(source) {
@@ -50,7 +50,7 @@ pub static fun String.from(source string) ^var String {
 /// 	return 0
 /// }
 /// ```
-pub static fun String.withCapacity(size uint) ^var String {
+pub fun static String.withCapacity(size uint) ^var String {
 	var str = mem::alloc<String>()
 	@str = String {
 		data: adt::List::newWithCapacity<rune>(size),
@@ -77,7 +77,7 @@ pub static fun String.withCapacity(size uint) ^var String {
 /// 	return 0
 /// }
 /// ```
-pub static fun String.new() ^var String {
+pub fun static String.new() ^var String {
 	return String::withCapacity(0)
 }
 

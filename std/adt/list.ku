@@ -22,13 +22,13 @@ let DEFAULT_GROWTH_RATE f32 = 2
 /// ```
 /// use std::adt
 /// 
-/// pub fun main()  int {
-///     something := adt::List::new<u8>()
-///     defer something.destroy()
+/// pub fun main() int {
+///     var xs = adt::List::new<u8>()
+///     defer xs.destroy()
 ///     return 0
 /// }
 /// ```
-pub static fun List.new<T>() ^var List<T> {
+pub fun static List.new<T>() ^var List<T> {
     return List::newWithCapacity<T>(0)
 }
 
@@ -48,7 +48,7 @@ pub static fun List.new<T>() ^var List<T> {
 ///     return fupa 
 /// }
 /// ```
-pub static fun List.newWithCapacity<T>(var cap uint) ^var List<T> {
+pub fun static List.newWithCapacity<T>(var cap uint) ^var List<T> {
     if cap <= 0 {
         cap = BASE_CAPACITY
     }
