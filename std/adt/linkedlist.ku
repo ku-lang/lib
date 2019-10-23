@@ -2,7 +2,7 @@
 
     BLOCKED BY #724
 
-use std::mem
+use std.mem
 
 pub type Node struct <T> {
     data: T,
@@ -15,13 +15,13 @@ pub type LinkedList struct<T> {
 }
 
 pub fun (LinkedList) new<T>()  ^var LinkedList<T> {
-    list := mem::alloc<LinkedList<T>>();
+    list := mem.alloc<LinkedList<T>>();
     @list = LinkedList<T> {
     };
     return list;
 }
 
 pub fun (l: ^LinkedList<T>) destroy() {
-    mem::free(l);
+    mem.free(l);
 }
 */

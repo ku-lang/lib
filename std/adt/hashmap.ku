@@ -1,4 +1,4 @@
-use std::mem
+use std.mem
 
 // BASE_CAPACITY: uint = 32;
 
@@ -15,7 +15,7 @@ pub type HashMap struct <K, V> {
 }
 
 pub fun HashMap.new<K, V>() ^var HashMap<K, V> {
-	var map = mem::alloc<HashMap<K, V>>()
+	var map = mem.alloc<HashMap<K, V>>()
 	let cap uint = BASE_CAPACITY
 	@map = HashMap<K, V> {
 		size: 0,
@@ -26,7 +26,7 @@ pub fun HashMap.new<K, V>() ^var HashMap<K, V> {
 
 pub fun HashMap<K, V>.get(key K) Option<V> {
 	// TBI
-	return Option::None
+	return Option.None
 }
 
 pub fun HashMap<K, V>.put(key K, val V) {

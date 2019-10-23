@@ -1,4 +1,4 @@
-use std::mem
+use std.mem
 
 /// A generic List data structure
 /// note that this structure, by default,
@@ -20,16 +20,16 @@ let DEFAULT_GROWTH_RATE f32 = 2
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main() int {
-///     var xs = adt::List::new<u8>()
+///     var xs = adt.List.new<u8>()
 ///     defer xs.destroy()
 ///     return 0
 /// }
 /// ```
 pub fun static List.new<T>() ^var List<T> {
-    return List::newWithCapacity<T>(0)
+    return List.newWithCapacity<T>(0)
 }
 
 /// Creates a List, allocating memory
@@ -38,12 +38,12 @@ pub fun static List.new<T>() ^var List<T> {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
-/// use std::io
+/// use std.adt
+/// use std.io
 ///
 /// pub fun main()  int {
-///     fupa := adt::List::newWithCapacity<int>(32)
-///     io::printUint(fupa.getCapacity())
+///     fupa := adt.List.newWithCapacity<int>(32)
+///     io.printUint(fupa.getCapacity())
 ///     fupa.destroy()
 ///     return fupa 
 /// }
@@ -55,9 +55,9 @@ pub fun static List.newWithCapacity<T>(var cap uint) ^var List<T> {
 
     let size = sizeof(T) * cap
 
-    var res = mem::alloc<List<T>>()
+    var res = mem.alloc<List<T>>()
     @res = List<T>{
-        data: (^var T)(mem::rawAlloc(size)),
+        data: (^var T)(mem.rawAlloc(size)),
         length: 0,
         growthRate: DEFAULT_GROWTH_RATE,
         capacity: cap,
@@ -71,16 +71,16 @@ pub fun static List.newWithCapacity<T>(var cap uint) ^var List<T> {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main()  int {
-///     list := adt::List::new<int>(666)
+///     list := adt.List.new<int>(666)
 ///     defer list.destroy()
 /// }
 /// ```
 pub fun List<T>.destroy() {
-    mem::rawFree(uintptr(this.data))
-    mem::free(^this)
+    mem.rawFree(uintptr(this.data))
+    mem.free(^this)
 }
 
 /// Returns a raw pointer to the
@@ -89,10 +89,10 @@ pub fun List<T>.destroy() {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main()  int {
-///     something := adt::List::new<int>()
+///     something := adt.List.new<int>()
 ///     something.append(4)
 ///     raw := something.toRawPointer()
 ///     return @raw
@@ -107,10 +107,10 @@ pub fun List<T>.toRawPointer() ^T {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main()  int {
-///     foo := adt::List::new<int>()
+///     foo := adt.List.new<int>()
 ///     foo.append(16)
 ///     foo.append(32)
 ///     foo.append(64)
@@ -120,9 +120,9 @@ pub fun List<T>.toRawPointer() ^T {
 /// ```
 pub fun List<T>.get(index uint) Option<T> {
     if index < 0 || index >= this.length {
-        return Option::None
+        return Option.None
     }
-    return Option::Some(this.data[index])
+    return Option.Some(this.data[index])
 }
 
 pub fun List<T>.set(val T, where uint) {
@@ -138,10 +138,10 @@ pub fun List<T>.set(val T, where uint) {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main()  int {
-///     foo := adt::List::new<int>()
+///     foo := adt.List.new<int>()
 ///     return foo.getLength()
 /// }
 /// ```
@@ -156,10 +156,10 @@ pub fun List<T>.getLength()  uint {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main()  int {
-///     foo := adt::List::newWithCapacity<int>(555)
+///     foo := adt.List.newWithCapacity<int>(555)
 ///     return foo.getCapacity()
 /// }
 /// ```
@@ -175,7 +175,7 @@ pub fun List<T>.getCapacity() uint {
 fun var List<T>.grow() {
     let oldData = this.data
     this.capacity = uint(f32(this.capacity) * this.growthRate)
-    var newData = (^var T)(mem::rawAlloc(sizeof(T) * this.capacity))
+    var newData = (^var T)(mem.rawAlloc(sizeof(T) * this.capacity))
 
     var i = uint(0)
     for i < this.length {
@@ -183,7 +183,7 @@ fun var List<T>.grow() {
         i += 1
     }
 
-    mem::rawFree(uintptr(oldData))
+    mem.rawFree(uintptr(oldData))
     this.data = newData
 }
 
@@ -195,10 +195,10 @@ fun var List<T>.grow() {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main()  int {
-///     foo := adt::List::new<int>()
+///     foo := adt.List.new<int>()
 ///     foo.setGrowthRate(1.5)
 ///     foo.destroy()
 ///     return 0
@@ -218,10 +218,10 @@ pub fun var List<T>.setGrowthRate(var rate f32) {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main()  int {
-///     ages := adt::List::new<int>
+///     ages := adt.List.new<int>
 ///     ages.append(17)
 ///     ages.append(16)
 ///     ages.append(32)
@@ -232,7 +232,7 @@ pub fun var List<T>.setGrowthRate(var rate f32) {
 /// ```
 pub fun List<T>.top() Option<T> {
     if this.length == 0 {
-        return Option::None
+        return Option.None
     }
     return this.get(this.length - 1)
 }
@@ -244,21 +244,21 @@ pub fun List<T>.top() Option<T> {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
-/// use std::io
+/// use std.adt
+/// use std.io
 /// 
 /// pub fun main()  int {
-///     identifiers := adt::List::new<string>()
+///     identifiers := adt.List.new<string>()
 ///     identifiers.append("foo")
 ///     identifiers.append("bar")
 ///     someIdentifier := identifiers.pop()
-///     io::println(someIdentifier.unwrap())
+///     io.println(someIdentifier.unwrap())
 ///     return 0
 /// }
 /// ```
 pub fun var List<T>.pop() Option<T> {
     if this.length == 0 {
-        return Option::None
+        return Option.None
     }
     var poppedValue = this.top()
     // clear old value?
@@ -274,10 +274,10 @@ pub fun var List<T>.pop() Option<T> {
 /// ## Examples
 ///
 /// ```
-/// use std::adt
+/// use std.adt
 /// 
 /// pub fun main()  int {
-///     fupa := adt::List::new<u8>()
+///     fupa := adt.List.new<u8>()
 ///     fupa.append(23)
 ///     fupa.destroy()
 ///     return 0

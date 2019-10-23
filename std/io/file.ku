@@ -1,6 +1,6 @@
-use std::mem
-use std::strings
-use std::unicode::utf8
+use std.mem
+use std.strings
+use std.unicode.utf8
 
 pub type FileMode enum {
 	Read,
@@ -21,46 +21,46 @@ let WRITE_FLAG ^u8 = c"w"
 let APPEND_FLAG ^u8 = c"a"
 
 pub fun static File.open(path ^u8, mode FileMode) Option<^var File> {
-	var f ^var File = mem::alloc<File>()
+	var f ^var File = mem.alloc<File>()
 	f.path = path
-	f.handle = C::fopen(path, mode.getLegacyFileMode())
+	f.handle = C.fopen(path, mode.getLegacyFileMode())
 
 	if f.handle == (^FILE)(0) {
 		// failed to read
-		return Option::None
+		return Option.None
 	}
 
-	return Option::Some(f)
+	return Option.Some(f)
 }
 
-pub fun File.readToString() Option<^var strings::String> {
+pub fun File.readToString() Option<^var strings.String> {
 	if !this.isOpen() {
-		return Option::None
+		return Option.None
 	}
 
-	if C::fseek(this.handle, 0, SEEK_END) != 0 {
+	if C.fseek(this.handle, 0, SEEK_END) != 0 {
 		panic("failed to seek")
 	}
 
-	let size = C::ftell(this.handle)
+	let size = C.ftell(this.handle)
 	if size == -1 {
 		panic("failed to tell")
 	}
 
-	C::rewind(this.handle)
+	C.rewind(this.handle)
 	
-	var result ^var strings::String = strings::String::withCapacity(uint(size))
+	var result ^var strings.String = strings.String.withCapacity(uint(size))
 	
 	var idx = uint(0)
 	for idx < uint(size) {
-		var char = []u8{C::fgetc(this.handle)}
+		var char = []u8{C.fgetc(this.handle)}
 		var decodedChar = []rune{0}
-		utf8::decode(decodedChar, char)
+		utf8.decode(decodedChar, char)
 		result.append(decodedChar[0])
 		idx += 1
 	}
 
-	return Option::Some(result)
+	return Option.Some(result)
 }
 
 pub fun File.isOpen()  bool {
@@ -69,9 +69,9 @@ pub fun File.isOpen()  bool {
 
 pub fun File.destroy() {
 	if this.isOpen() {
-		C::fclose(this.handle)
+		C.fclose(this.handle)
 	}
-	mem::free(^this)
+	mem.free(^this)
 }
 
 /*
@@ -82,13 +82,13 @@ pub fun File.destroy() {
 */
 pub fun FileMode.getLegacyFileMode()  ^u8 {
 	match this {
-		FileMode::Read => {
+		FileMode.Read => {
 			return READ_FLAG
 		},
-		FileMode::Write => {
+		FileMode.Write => {
 			return WRITE_FLAG
 		},
-		FileMode::Append => {
+		FileMode.Append => {
 			return APPEND_FLAG
 		},
 		_ => {

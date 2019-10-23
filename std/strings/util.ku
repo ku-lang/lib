@@ -9,14 +9,14 @@
 /// ## Example
 ///
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 /// 
 /// pub fun main()  int {
 /// 	a := "foobar"
 /// 	b := "bar"
-/// 	if string::contains(a, b) {
-/// 		io::println("Found it!")
+/// 	if string.contains(a, b) {
+/// 		io.println("Found it!")
 /// 	}
 ///		return 0
 /// }
@@ -50,14 +50,14 @@ pub fun contains(haystack string, needle string) bool {
 ///
 /// ## Example
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 ///
 /// pub fun main()  int {
 /// 	file := "image_temp"
 /// 	prefix := "image"
-/// 	if string::hasPrefix(file, prefix) {
-/// 		io::println("Yep!")
+/// 	if string.hasPrefix(file, prefix) {
+/// 		io.println("Yep!")
 /// 	}
 /// 	return 0	
 /// }
@@ -81,13 +81,13 @@ pub fun hasPrefix(source string, prefix string)  bool {
 ///
 /// ## Example
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 ///
 /// pub fun main()  int {
 /// 	file := "main.ku"
-/// 	if string::hasPrefix(file, ext) {
-/// 		io::println("Yep!")
+/// 	if string.hasPrefix(file, ext) {
+/// 		io.println("Yep!")
 /// 	}
 /// 	return 0	
 /// }
@@ -115,14 +115,14 @@ pub fun hasSuffix(source string, suffix string)  bool {
 ///
 /// ## Example
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 ///
 /// pub fun main()  int {
 /// 	another := "hello, world"
 /// 	one := "dj khaled"
-/// 	if string::compare(another, one) {
-/// 		io::println("They are the same!")
+/// 	if string.compare(another, one) {
+/// 		io.println("They are the same!")
 /// 	}
 /// 	return 0
 /// }

@@ -1,10 +1,10 @@
-use std::adt
-use std::mem
-use std::unicode::utf8
+use std.adt
+use std.mem
+use std.unicode.utf8
 
 /// A dynamic, unicode decoded string.
 pub type String {
-	data ^var adt::List<rune>
+	data ^var adt.List<rune>
 }
 
 /// Creates a heap-allocated, dynamic string
@@ -12,18 +12,18 @@ pub type String {
 ///
 /// ## Example
 /// ```
-/// use std::string
+/// use std.string
 ///
-/// myString := strings::String::from("Hello, World!")
+/// myString := strings.String.from("Hello, World!")
 /// defer myString.destroy()
 /// ```
 pub fun static String.from(source string) ^var String {
-	var str = String::withCapacity(len(source))
+	var str = String.withCapacity(len(source))
 	var idx = uint(0)
 	for idx < len(source) {
 		var char = []u8{source[idx]}
 		var decodedChar = []rune{0}
-		utf8::decode(decodedChar, char)
+		utf8.decode(decodedChar, char)
 		str.append(decodedChar[0])
 		idx += 1
 	}
@@ -35,10 +35,10 @@ pub fun static String.from(source string) ^var String {
 ///
 /// ## Examples
 /// ```
-/// use std::string
+/// use std.string
 /// 
 /// pub fun main()  int {
-/// 	buffer := strings::String::withCapacity(32)
+/// 	buffer := strings.String.withCapacity(32)
 /// 	defer buffer.destroy()
 /// 	
 /// 	var idx := 0
@@ -51,9 +51,9 @@ pub fun static String.from(source string) ^var String {
 /// }
 /// ```
 pub fun static String.withCapacity(size uint) ^var String {
-	var str = mem::alloc<String>()
+	var str = mem.alloc<String>()
 	@str = String {
-		data: adt::List::newWithCapacity<rune>(size),
+		data: adt.List.newWithCapacity<rune>(size),
 	}
 
 	var idx = uint(0)
@@ -69,16 +69,16 @@ pub fun static String.withCapacity(size uint) ^var String {
 ///
 /// ## Examples
 /// ```
-/// use std::string
+/// use std.string
 /// 
 /// pub fun main()  int {
-/// 	buffer := strings::String::new()
+/// 	buffer := strings.String.new()
 /// 	defer buffer.destroy()
 /// 	return 0
 /// }
 /// ```
 pub fun static String.new() ^var String {
-	return String::withCapacity(0)
+	return String.withCapacity(0)
 }
 
 /// Clear the entire string returning it
@@ -86,16 +86,16 @@ pub fun static String.new() ^var String {
 ///
 /// ## Examples
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 /// 
 /// pub fun main()  int {
-/// 	johnsLeftString := strings::String::from("Hello, World!")
+/// 	johnsLeftString := strings.String.from("Hello, World!")
 /// 	defer johnsLeftString.destroy()
 ///
-/// 	io::printDynamicString(johnsLeftString)
+/// 	io.printDynamicString(johnsLeftString)
 /// 	johnsLeftString.clear()
-/// 	io::printDynamicString(johnsLeftString)
+/// 	io.printDynamicString(johnsLeftString)
 /// 
 /// 	return 0
 /// }
@@ -118,19 +118,19 @@ pub fun String.toRawPointer() ^rune {
 /// ## Examples
 /// 
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 /// 
 /// pub fun main()  int {
-/// 	sentence := strings::String::from("hey jude, how are ya?")
+/// 	sentence := strings.String.from("hey jude, how are ya?")
 /// 	end := string.pop()
-///		io::printRune(end.unwrap())
+///		io.printRune(end.unwrap())
 /// 	return 0
 /// }
 /// ```
 pub fun String.pop()  Option<rune> {
 	if this.length() == 0 {
-		return Option::None
+		return Option.None
 	}
 	return this.data.pop()
 }
@@ -141,13 +141,13 @@ pub fun String.pop()  Option<rune> {
 /// ## Examples
 /// 
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 ///
 /// pub fun main()  int {
-/// 	part := strings::String::from("Hello, ")
+/// 	part := strings.String.from("Hello, ")
 /// 	part.concat("world!")
-/// 	io::printDynamicString(part)
+/// 	io.printDynamicString(part)
 ///		return 0
 /// }
 /// ```
@@ -166,13 +166,13 @@ pub fun String.concat(other string) {
 /// ## Examples
 /// 
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 /// 
 /// pub fun main()  int {
 /// 	junk := []rune{'a', 'b', 'c'}
-///		foo := strings::String::from("some letters: ")
-/// 	io::printDynamicString(foo)
+///		foo := strings.String.from("some letters: ")
+/// 	io.printDynamicString(foo)
 ///
 ///		var idx := uint(0)
 ///		for idx < len(junk) {
@@ -183,7 +183,7 @@ pub fun String.concat(other string) {
 /// 		idx += 1
 /// 	}
 ///
-/// 	io::printDynamicString(foo)
+/// 	io.printDynamicString(foo)
 /// 	return 0
 /// }
 /// ```
@@ -197,15 +197,15 @@ pub fun String.append(char rune) {
 /// ## Examples
 /// 
 /// ```
-/// use std::string
-/// use std::io
+/// use std.string
+/// use std.io
 /// 
 /// pub fun main()  int {
-/// 	foo := strings::String::from("apples, tomatos, oranges")
+/// 	foo := strings.String.from("apples, tomatos, oranges")
 ///		var idx := uint(0)
 ///		for idx < foo.length() {
 ///			char := foo.at(idx)
-///			io::printRune(char.unwrap())
+///			io.printRune(char.unwrap())
 ///			idx += 1
 ///		}
 ///		return 0
@@ -213,7 +213,7 @@ pub fun String.append(char rune) {
 /// ```
 pub fun String.get(index uint) Option<rune> {
 	if index < 0 || index > this.length() {
-		return Option::None
+		return Option.None
 	}
 	return this.data.get(index)
 }
@@ -231,10 +231,10 @@ pub fun String.set(val rune, where uint) {
 /// ## Examples
 /// 
 /// ```
-/// use std::string
+/// use std.string
 /// 
 /// pub fun main()  int {
-/// 	foo := strings::String::from("Ku Language!")
+/// 	foo := strings.String.from("Ku Language!")
 /// 	return foo.length()
 /// }
 /// ```
@@ -247,15 +247,15 @@ pub fun String.length() uint {
 /// ## Examples
 /// 
 /// ```
-/// use std::string
+/// use std.string
 ///
 /// pub fun main()  int {
-/// 	name := strings::String::from("Felix")
+/// 	name := strings.String.from("Felix")
 /// 	name.destroy()
 ///		return 0
 /// }
 /// ```
 pub fun String.destroy() {
 	this.data.destroy()
-	mem::free(^this)
+	mem.free(^this)
 }
