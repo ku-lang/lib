@@ -66,7 +66,6 @@ pub fun static Stack.new<T>() ^var Stack<T> {
 pub fun Stack<T>.getLength() uint {
 	return this.data.getLength()
 }
-
 /*
 /// This returns how much memory has been
 /// allocated for the stack.

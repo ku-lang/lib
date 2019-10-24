@@ -29,7 +29,7 @@ let DEFAULT_GROWTH_RATE f32 = 2
 /// }
 /// ```
 pub fun static List.new<T>() ^var List<T> {
-    return List.newWithCapacity<T>(0)
+    return List.newWithCapacity<T>(uint(0))
 }
 
 /// Creates a List, allocating memory
@@ -80,7 +80,7 @@ pub fun static List.newWithCapacity<T>(var cap uint) ^var List<T> {
 /// ```
 pub fun List<T>.destroy() {
     mem.rawFree(uintptr(this.data))
-    mem.free(^this)
+    mem.free<List<T>>(^this)
 }
 
 /// Returns a raw pointer to the
